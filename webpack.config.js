@@ -9,6 +9,7 @@ module.exports = (env, argv) => {
         entry: {
             main: [
                 './src/index.ts',
+                './src/game/index.ts',
             ],
         },
         module: {
