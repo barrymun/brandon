@@ -1,3 +1,6 @@
+import { Position } from "src/constants";
+import { Sprite } from "src/game";
+
 export class Game {
     private canvas: HTMLCanvasElement;
 
@@ -29,6 +32,12 @@ export class Game {
 
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
+
+    public createSprite = (position: Position): Sprite => {
+        const sprite = new Sprite({ game: this, position });
+        sprite.draw();
+        return sprite;
+    };
 
     private domContentLoadedListener = (_event: Event) => {
         console.log('DOM fully loaded and parsed');
