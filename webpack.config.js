@@ -23,6 +23,9 @@ module.exports = (env, argv) => {
         },
         resolve: {
             extensions: ['.ts', '.js'],
+            alias: {
+                src: path.resolve(__dirname, 'src'),
+            },
         },
         output: {
             filename: 'bundle.js',

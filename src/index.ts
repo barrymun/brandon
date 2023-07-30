@@ -1,4 +1,4 @@
-import { Config } from "./game";
+import { Config } from "src/game";
 
 const canvas: HTMLCanvasElement = document.getElementById('c')! as HTMLCanvasElement;
 const context: CanvasRenderingContext2D = canvas.getContext('2d')!;
