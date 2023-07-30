@@ -1,1 +1,1 @@
-export * from "src/game/config";
+export * from "src/game/game";
