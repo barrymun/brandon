@@ -1,4 +1,4 @@
-import { Position } from "src/constants";
+import { Coords } from "src/constants";
 import { Sprite } from "src/game";
 
 export class Game {
@@ -33,8 +33,8 @@ export class Game {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    public createSprite = (position: Position): Sprite => {
-        const sprite = new Sprite({ game: this, position });
+    public createSprite = ({ position, velocity }: { position: Coords, velocity: Coords }): Sprite => {
+        const sprite = new Sprite({ game: this, position, velocity });
         sprite.draw();
         return sprite;
     };

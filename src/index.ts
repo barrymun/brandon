@@ -1,10 +1,32 @@
-import { Game } from "src/game";
+import { Game, Sprite } from "src/game";
 
-function start(): void {
-    const game = new Game();
+let game: Game;
+let player: Sprite;
+let enemy: Sprite;
 
-    const player = game.createSprite({ x: 0, y: 0 });
-    const enemy = game.createSprite({ x: 400, y: 100 });
+function run(): void {
+    game = new Game();
+
+    player = game.createSprite({
+        position: { x: 0, y: 0 },
+        velocity: { x: 0, y: 0 },
+    });
+    
+    enemy = game.createSprite({
+        position: { x: 400, y: 100 },
+        velocity: { x: 0, y: 0 },
+    });
 }
 
-start();
+function animate(): void {
+    requestAnimationFrame(animate);
+    
+    game.getContext().fillStyle = 'black';
+    game.getContext().fillRect(0, 0, game.getCanvas().width, game.getCanvas().height);
+    
+    player.udpate();
+    enemy.udpate();
+};
+
+run();
+animate();
