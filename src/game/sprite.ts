@@ -45,13 +45,13 @@ export class Sprite extends Base {
         this.keys = keys;
     };
 
-    private lastKey: KeyboardEvent['key'];
+    // private lastKey: KeyboardEvent['key'];
 
-    public getLastKey = (): KeyboardEvent['key'] => this.lastKey;
+    // public getLastKey = (): KeyboardEvent['key'] => this.lastKey;
 
-    private setLastKey = (lastKey: KeyboardEvent['key']): void => {
-        this.lastKey = lastKey;
-    };
+    // private setLastKey = (lastKey: KeyboardEvent['key']): void => {
+    //     this.lastKey = lastKey;
+    // };
     
     private position: Coords;
 
@@ -111,10 +111,14 @@ export class Sprite extends Base {
         // unset velocity (handle no keys pressed)
         this.setVelocity({ ...this.getVelocity(), x: 0 });
         
-        if (this.getKeys().d.pressed && this.getLastKey() === 'd') {
-            this.setVelocity({ ...this.getVelocity(), x: 1 });
-        } else if (this.getKeys().a.pressed && this.getLastKey() === 'a') {
-            this.setVelocity({ ...this.getVelocity(), x: -1 });
+        if (this.getKeys().d.pressed && !this.getKeys().a.pressed) {
+            this.setVelocity({ ...this.getVelocity(), x: 5 });
+        }
+        if (this.getKeys().a.pressed && !this.getKeys().d.pressed) {
+            this.setVelocity({ ...this.getVelocity(), x: -5 });
+        }
+        if (this.getKeys().w.pressed && this.getVelocity().y === 0) {
+            this.setVelocity({ ...this.getVelocity(), y: -10 });
         }
     };
 
@@ -124,14 +128,12 @@ export class Sprite extends Base {
         switch (event.key) {
             case 'd':
                 this.setKeys({ ...this.getKeys(), d: { pressed: true } });
-                this.setLastKey('d');
                 break;
             case 'a':
                 this.setKeys({ ...this.getKeys(), a: { pressed: true } });
-                this.setLastKey('a');
                 break;
             case 'w':
-                this.setVelocity({ ...this.getVelocity(), y: -10 });
+                this.setKeys({ ...this.getKeys(), w: { pressed: true } });
                 break;
             default:
                 break;
@@ -144,10 +146,13 @@ export class Sprite extends Base {
         switch (event.key) {
             case 'd':
                 this.setKeys({ ...this.getKeys(), d: { pressed: false } });
+                break;
             case 'a':
                 this.setKeys({ ...this.getKeys(), a: { pressed: false } });
+                break;
             case 'w':
                 this.setKeys({ ...this.getKeys(), w: { pressed: false } });
+                break;
             default:
                 break;
         }
