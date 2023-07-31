@@ -15,6 +15,9 @@ export interface Keys {
     d: {
         pressed: boolean;
     },
+    w: {
+        pressed: boolean,
+    },
 }
 
 export class Sprite extends Base {
@@ -29,6 +32,9 @@ export class Sprite extends Base {
             pressed: false,
         },
         d: {
+            pressed: false,
+        },
+        w: {
             pressed: false,
         },
     };
@@ -124,6 +130,9 @@ export class Sprite extends Base {
                 this.setKeys({ ...this.getKeys(), a: { pressed: true } });
                 this.setLastKey('a');
                 break;
+            case 'w':
+                this.setVelocity({ ...this.getVelocity(), y: -10 });
+                break;
             default:
                 break;
         }
@@ -137,6 +146,8 @@ export class Sprite extends Base {
                 this.setKeys({ ...this.getKeys(), d: { pressed: false } });
             case 'a':
                 this.setKeys({ ...this.getKeys(), a: { pressed: false } });
+            case 'w':
+                this.setKeys({ ...this.getKeys(), w: { pressed: false } });
             default:
                 break;
         }
