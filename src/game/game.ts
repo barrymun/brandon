@@ -1,5 +1,7 @@
 import { Coords } from "src/constants";
-import { Sprite } from "src/game";
+import { Sprite, SpriteProps } from "src/game";
+
+type CreateSpriteProps = Omit<SpriteProps, 'game'>;
 
 export class Game {
     private canvas: HTMLCanvasElement;
@@ -33,14 +35,10 @@ export class Game {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    public createSprite = ({ position, velocity }: { position: Coords, velocity: Coords }): Sprite => {
-        const sprite = new Sprite({ game: this, position, velocity });
+    public createSprite = ({ position, velocity, playerControlled }: CreateSpriteProps): Sprite => {
+        const sprite = new Sprite({ game: this, position, velocity, playerControlled });
         sprite.draw();
         return sprite;
-    };
-
-    private domContentLoadedListener = (_event: Event) => {
-        console.log('DOM fully loaded and parsed');
     };
 
     private unloadListener = (_event: Event) => {
@@ -48,13 +46,10 @@ export class Game {
     };
 
     private bindListeners = (): void => {
-        window.addEventListener('DOMContentLoaded', this.domContentLoadedListener);
         window.addEventListener('unload', this.unloadListener);
     };
 
     private unbindListeners = (): void => {
-        window.removeEventListener('DOMContentLoaded', this.domContentLoadedListener);
         window.removeEventListener('unload', this.unloadListener);
-        console.log('Unloaded');
     };
 };

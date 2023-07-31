@@ -10,11 +10,13 @@ function run(): void {
     player = game.createSprite({
         position: { x: 0, y: 0 },
         velocity: { x: 0, y: 0 },
+        playerControlled: true,
     });
     
     enemy = game.createSprite({
         position: { x: 400, y: 100 },
         velocity: { x: 0, y: 0 },
+        playerControlled: false,
     });
 }
 
