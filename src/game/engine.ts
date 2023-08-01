@@ -1,9 +1,8 @@
-import { Coords } from "src/constants";
-import { Sprite, SpriteProps } from "src/game";
+import { Sprite, SpriteProps } from "game";
 
-type CreateSpriteProps = Omit<SpriteProps, 'game'>;
+type CreateSpriteProps = Omit<SpriteProps, 'engine'>;
 
-export class Game {
+export class Engine {
     private canvas: HTMLCanvasElement;
 
     public getCanvas = (): HTMLCanvasElement => this.canvas;
@@ -36,7 +35,7 @@ export class Game {
     }
 
     public createSprite = ({ position, velocity, playerControlled }: CreateSpriteProps): Sprite => {
-        const sprite = new Sprite({ game: this, position, velocity, playerControlled });
+        const sprite = new Sprite({ engine: this, position, velocity, playerControlled });
         sprite.draw();
         return sprite;
     };

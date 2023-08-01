@@ -23,9 +23,7 @@ module.exports = (env, argv) => {
         },
         resolve: {
             extensions: ['.ts', '.js'],
-            alias: {
-                src: path.resolve(__dirname, 'src'),
-            },
+            modules: ['node_modules', path.join(__dirname, 'src')],
         },
         output: {
             filename: 'bundle.js',

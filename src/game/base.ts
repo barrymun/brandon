@@ -1,15 +1,15 @@
-import { Game } from "src/game";
+import { Engine } from "game";
 
 export abstract class Base {
-    private game: Game;
+    private engine: Engine;
 
-    protected getGame = (): Game => this.game;
+    protected getEngine = (): Engine => this.engine;
 
-    private setGame = (game: Game): void => {
-        this.game = game;
+    private setEngine = (engine: Engine): void => {
+        this.engine = engine;
     };
 
-    constructor(game: Game) {
-        this.setGame(game);
+    constructor(engine: Engine) {
+        this.setEngine(engine);
     }
 };

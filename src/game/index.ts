@@ -1,3 +1,3 @@
-export * from "src/game/game";
-export * from "src/game/base";
-export * from "src/game/sprite";
+export * from "game/engine";
+export * from "game/base";
+export * from "game/sprite";

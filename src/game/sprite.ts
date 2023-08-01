@@ -1,8 +1,8 @@
-import { Coords } from "src/constants";
-import { Base, Game } from "src/game";
+import { Base, Engine } from "game";
+import { Coords } from "utils";
 
 export interface SpriteProps {
-    game: Game; 
+    engine: Engine; 
     position: Coords; 
     velocity: Coords; 
     playerControlled: boolean;
@@ -77,7 +77,7 @@ export class Sprite extends Base {
         this.playerControlled = playerControlled;
     };
     
-    constructor({ game, position, velocity, playerControlled }: SpriteProps) {
+    constructor({ engine: game, position, velocity, playerControlled }: SpriteProps) {
         super(game);
         this.setPosition(position);
         this.setVelocity(velocity);
@@ -87,8 +87,8 @@ export class Sprite extends Base {
     };
 
     public draw = (): void => {
-        this.getGame().getContext().fillStyle = 'red';
-        this.getGame()
+        this.getEngine().getContext().fillStyle = 'red';
+        this.getEngine()
             .getContext()
             .fillRect(this.getPosition().x, this.getPosition().y, this.width, this.height);
     };
@@ -102,7 +102,7 @@ export class Sprite extends Base {
             y: this.getPosition().y + this.getVelocity().y,
         });
 
-        if (this.getPosition().y + this.height + this.getVelocity().y >= this.getGame().getCanvas().height) {
+        if (this.getPosition().y + this.height + this.getVelocity().y >= this.getEngine().getCanvas().height) {
             this.setVelocity({ ...this.getVelocity(), y: 0 });
         } else {
             this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });

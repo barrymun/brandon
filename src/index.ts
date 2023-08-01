@@ -1,19 +1,19 @@
-import { Game, Sprite } from "src/game";
+import { Engine, Sprite } from "game";
 
-let game: Game;
+let engine: Engine;
 let player: Sprite;
 let enemy: Sprite;
 
 function run(): void {
-    game = new Game();
+    engine = new Engine();
 
-    player = game.createSprite({
+    player = engine.createSprite({
         position: { x: 0, y: 0 },
         velocity: { x: 0, y: 0 },
         playerControlled: true,
     });
     
-    enemy = game.createSprite({
+    enemy = engine.createSprite({
         position: { x: 400, y: 100 },
         velocity: { x: 0, y: 0 },
         playerControlled: false,
@@ -23,8 +23,8 @@ function run(): void {
 function animate(): void {
     requestAnimationFrame(animate);
     
-    game.getContext().fillStyle = 'black';
-    game.getContext().fillRect(0, 0, game.getCanvas().width, game.getCanvas().height);
+    engine.getContext().fillStyle = 'black';
+    engine.getContext().fillRect(0, 0, engine.getCanvas().width, engine.getCanvas().height);
     
     player.udpate();
     enemy.udpate();
