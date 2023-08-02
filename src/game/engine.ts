@@ -34,8 +34,8 @@ export class Engine {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    public createSprite = ({ position, velocity, playerControlled, keyBindings }: CreateSpriteProps): Sprite => {
-        const sprite = new Sprite({ engine: this, position, velocity, playerControlled, keyBindings });
+    public createSprite = ({ position, velocity, playerControlled, keyBindings, colour }: CreateSpriteProps): Sprite => {
+        const sprite = new Sprite({ engine: this, position, velocity, playerControlled, keyBindings, colour });
         sprite.draw();
         return sprite;
     };

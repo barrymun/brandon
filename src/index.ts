@@ -1,5 +1,5 @@
 import { Engine, Sprite } from "game";
-import { enemyKeyBindings, playerKeyBindings } from "utils";
+import { Colour, enemyKeyBindings, playerKeyBindings } from "utils";
 
 let engine: Engine;
 let player: Sprite;
@@ -13,6 +13,7 @@ function run(): void {
         velocity: { x: 0, y: 0 },
         playerControlled: true,
         keyBindings: playerKeyBindings,
+        colour: Colour.Green,
     });
     
     enemy = engine.createSprite({
@@ -20,6 +21,7 @@ function run(): void {
         velocity: { x: 0, y: 0 },
         playerControlled: false,
         keyBindings: enemyKeyBindings,
+        colour: Colour.Red,
     });
 }
 

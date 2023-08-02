@@ -1,5 +1,5 @@
 import { Base, Engine } from "game";
-import { Coords, KeyBindings } from "utils";
+import { AttackBox, Colour, Coords, KeyBindings } from "utils";
 
 export interface SpriteProps {
     engine: Engine; 
@@ -7,6 +7,7 @@ export interface SpriteProps {
     velocity: Coords; 
     playerControlled: boolean;
     keyBindings: KeyBindings;
+    colour: Colour;
 };
 
 export interface Keys {
@@ -25,6 +26,10 @@ export class Sprite extends Base {
     private readonly width: number = 50;
     
     private readonly height: number = 150;
+    
+    private readonly attackBoxWidth: number = 100;
+    
+    private readonly attackBoxHeight: number = 50;
     
     private readonly gravity: number = 0.7;
 
@@ -64,6 +69,19 @@ export class Sprite extends Base {
 
     private setPosition = (position: Coords): void => {
         this.position = position;
+        this.setAttackBox({
+            width: this.attackBoxWidth,
+            height: this.attackBoxHeight,
+            position,
+        });
+    };
+
+    private attackBox: AttackBox;
+
+    public getAttackBox = (): AttackBox => this.attackBox;
+
+    private setAttackBox = (attackBox: AttackBox): void => {
+        this.attackBox = attackBox;
     };
     
     private velocity: Coords;
@@ -81,22 +99,46 @@ export class Sprite extends Base {
     private setPlayerControlled = (playerControlled: boolean): void => {
         this.playerControlled = playerControlled;
     };
+
+    private colour: Colour;
+
+    public getColour = (): Colour => this.colour;
+
+    private setColour = (colour: Colour): void => {
+        this.colour = colour;
+    };
     
-    constructor({ engine, position, velocity, playerControlled, keyBindings }: SpriteProps) {
+    constructor({ engine, position, velocity, playerControlled, keyBindings, colour }: SpriteProps) {
         super(engine);
         this.setPosition(position);
         this.setVelocity(velocity);
         this.setPlayerControlled(playerControlled);
         this.setKeyBindings(keyBindings);
+        this.setColour(colour);
         this.bindListeners();
         console.log('Sprite loaded');
     };
 
     public draw = (): void => {
-        this.getEngine().getContext().fillStyle = 'red';
+        this.getEngine().getContext().fillStyle = this.getColour();
         this.getEngine()
             .getContext()
-            .fillRect(this.getPosition().x, this.getPosition().y, this.width, this.height);
+            .fillRect(
+                this.getPosition().x, 
+                this.getPosition().y, 
+                this.width, 
+                this.height
+            );
+        
+        this.getEngine().getContext().fillStyle = Colour.Blue;
+        this.getEngine()
+            .getContext()
+            .fillRect(
+                this.getAttackBox().position.x, 
+                this.getAttackBox().position.y, 
+                this.getAttackBox().width, 
+                this.getAttackBox().height
+            );
     };
 
     public udpate = (): void => {

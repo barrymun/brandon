@@ -11,3 +11,9 @@ export const enemyKeyBindings: KeyBindings = {
     right: 'ArrowRight',
     jump: 'ArrowUp',
 };
+
+export enum Colour {
+    Red = 'red',
+    Green = 'green',
+    Blue = 'blue',
+};
