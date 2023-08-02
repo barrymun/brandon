@@ -26,11 +26,11 @@ export class Sprite extends Base {
     
     private readonly height: number = 150;
     
-    private readonly gravity: number = 0.2;
+    private readonly gravity: number = 0.7;
 
     private readonly moveSpeed: number = 5;
 
-    private readonly jumpHeight: number = 10;
+    private readonly jumpHeight: number = 20;
 
     private keyBindings: KeyBindings;
 
