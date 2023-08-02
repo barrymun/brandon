@@ -23,19 +23,19 @@ export interface Keys {
 }
 
 export class Sprite extends Base {
-    private readonly width: number = 50;
+    public readonly width: number = 50;
     
-    private readonly height: number = 150;
+    public readonly height: number = 150;
     
-    private readonly attackBoxWidth: number = 100;
+    public readonly attackBoxWidth: number = 100;
     
-    private readonly attackBoxHeight: number = 50;
+    public readonly attackBoxHeight: number = 50;
     
-    private readonly gravity: number = 0.7;
+    public readonly gravity: number = 0.7;
 
-    private readonly moveSpeed: number = 5;
+    public readonly moveSpeed: number = 5;
 
-    private readonly jumpHeight: number = 20;
+    public readonly jumpHeight: number = 20;
 
     private keyBindings: KeyBindings;
 
@@ -107,6 +107,14 @@ export class Sprite extends Base {
     private setColour = (colour: Colour): void => {
         this.colour = colour;
     };
+
+    private isAttacking: boolean = false;
+
+    public getIsAttacking = (): boolean => this.isAttacking;
+
+    public setIsAttacking = (isAttacking: boolean): void => {
+        this.isAttacking = isAttacking;
+    };
     
     constructor({ engine, position, velocity, playerControlled, keyBindings, colour }: SpriteProps) {
         super(engine);
@@ -170,6 +178,13 @@ export class Sprite extends Base {
         }
     };
 
+    private attack(): void {
+        this.setIsAttacking(true);
+        setTimeout(() => {
+            this.setIsAttacking(false);
+        }, 100);
+    };
+
     private handleKeydown = (event: KeyboardEvent) => {
         // if (!this.getPlayerControlled()) return;
         
@@ -183,6 +198,8 @@ export class Sprite extends Base {
             case this.getKeyBindings().jump:
                 this.setKeys({ ...this.getKeys(), jump: { pressed: true } });
                 break;
+            case this.getKeyBindings().attack:
+                this.attack();
             default:
                 break;
         }

@@ -76,6 +76,19 @@ export class Engine {
         return sprite;
     };
 
+    private detectCollision = (): void => {
+        if (
+            this.getPlayer().getAttackBox().position.x + this.getPlayer().getAttackBox().width >= this.getEnemy().getPosition().x
+            && this.getPlayer().getAttackBox().position.x <= this.getEnemy().getPosition().x + this.getEnemy().width
+            && this.getPlayer().getAttackBox().position.y + this.getPlayer().getAttackBox().height >= this.getEnemy().getPosition().y
+            && this.getPlayer().getAttackBox().position.y <= this.getEnemy().getPosition().y + this.getEnemy().height
+            && this.getPlayer().getIsAttacking()
+        ) {
+            this.getPlayer().setIsAttacking(false);
+            console.log('in range');
+        }
+    };
+
     public run = (): void => {
         requestAnimationFrame(this.run);
 
@@ -84,6 +97,8 @@ export class Engine {
         
         this.getPlayer().udpate();
         this.getEnemy().udpate();
+
+        this.detectCollision();
     };
 
     private unloadListener = (_event: Event) => {
