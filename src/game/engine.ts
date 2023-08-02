@@ -24,7 +24,7 @@ export class Engine {
         this.setContext(this.canvas.getContext('2d')!);
         this.setCanvasSize();
         this.bindListeners();
-        console.log('Config loaded');
+        console.log('Engine loaded');
     };
 
     private setCanvasSize = (): void => {
@@ -34,8 +34,8 @@ export class Engine {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    public createSprite = ({ position, velocity, playerControlled }: CreateSpriteProps): Sprite => {
-        const sprite = new Sprite({ engine: this, position, velocity, playerControlled });
+    public createSprite = ({ position, velocity, playerControlled, keyBindings }: CreateSpriteProps): Sprite => {
+        const sprite = new Sprite({ engine: this, position, velocity, playerControlled, keyBindings });
         sprite.draw();
         return sprite;
     };

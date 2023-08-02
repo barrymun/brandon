@@ -1,4 +1,5 @@
 import { Engine, Sprite } from "game";
+import { enemyKeyBindings, playerKeyBindings } from "utils";
 
 let engine: Engine;
 let player: Sprite;
@@ -11,12 +12,14 @@ function run(): void {
         position: { x: 0, y: 0 },
         velocity: { x: 0, y: 0 },
         playerControlled: true,
+        keyBindings: playerKeyBindings,
     });
     
     enemy = engine.createSprite({
         position: { x: 400, y: 100 },
         velocity: { x: 0, y: 0 },
         playerControlled: false,
+        keyBindings: enemyKeyBindings,
     });
 }
 

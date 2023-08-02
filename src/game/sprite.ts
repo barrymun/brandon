@@ -1,21 +1,22 @@
 import { Base, Engine } from "game";
-import { Coords } from "utils";
+import { Coords, KeyBindings } from "utils";
 
 export interface SpriteProps {
     engine: Engine; 
     position: Coords; 
     velocity: Coords; 
     playerControlled: boolean;
+    keyBindings: KeyBindings;
 };
 
 export interface Keys {
-    a: {
+    left: {
         pressed: boolean;
     },
-    d: {
+    right: {
         pressed: boolean;
     },
-    w: {
+    jump: {
         pressed: boolean,
     },
 }
@@ -31,14 +32,22 @@ export class Sprite extends Base {
 
     private readonly jumpHeight: number = 10;
 
+    private keyBindings: KeyBindings;
+
+    public getKeyBindings = (): KeyBindings => this.keyBindings;
+
+    private setKeyBindings = (keyBindings: KeyBindings): void => {
+        this.keyBindings = keyBindings;
+    };
+
     private keys: Keys = {
-        a: {
+        left: {
             pressed: false,
         },
-        d: {
+        right: {
             pressed: false,
         },
-        w: {
+        jump: {
             pressed: false,
         },
     };
@@ -48,14 +57,6 @@ export class Sprite extends Base {
     private setKeys = (keys: Keys): void => {
         this.keys = keys;
     };
-
-    // private lastKey: KeyboardEvent['key'];
-
-    // public getLastKey = (): KeyboardEvent['key'] => this.lastKey;
-
-    // private setLastKey = (lastKey: KeyboardEvent['key']): void => {
-    //     this.lastKey = lastKey;
-    // };
     
     private position: Coords;
 
@@ -81,11 +82,12 @@ export class Sprite extends Base {
         this.playerControlled = playerControlled;
     };
     
-    constructor({ engine: game, position, velocity, playerControlled }: SpriteProps) {
-        super(game);
+    constructor({ engine, position, velocity, playerControlled, keyBindings }: SpriteProps) {
+        super(engine);
         this.setPosition(position);
         this.setVelocity(velocity);
         this.setPlayerControlled(playerControlled);
+        this.setKeyBindings(keyBindings);
         this.bindListeners();
         console.log('Sprite loaded');
     };
@@ -115,29 +117,29 @@ export class Sprite extends Base {
         // unset velocity (handle no keys pressed)
         this.setVelocity({ ...this.getVelocity(), x: 0 });
         
-        if (this.getKeys().d.pressed && !this.getKeys().a.pressed) {
+        if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
         }
-        if (this.getKeys().a.pressed && !this.getKeys().d.pressed) {
+        if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
         }
-        if (this.getKeys().w.pressed && this.getVelocity().y === 0) {
+        if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
             this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
         }
     };
 
     private handleKeydown = (event: KeyboardEvent) => {
-        if (!this.getPlayerControlled()) return;
+        // if (!this.getPlayerControlled()) return;
         
         switch (event.key) {
-            case 'd':
-                this.setKeys({ ...this.getKeys(), d: { pressed: true } });
+            case this.getKeyBindings().right:
+                this.setKeys({ ...this.getKeys(), right: { pressed: true } });
                 break;
-            case 'a':
-                this.setKeys({ ...this.getKeys(), a: { pressed: true } });
+            case this.getKeyBindings().left:
+                this.setKeys({ ...this.getKeys(), left: { pressed: true } });
                 break;
-            case 'w':
-                this.setKeys({ ...this.getKeys(), w: { pressed: true } });
+            case this.getKeyBindings().jump:
+                this.setKeys({ ...this.getKeys(), jump: { pressed: true } });
                 break;
             default:
                 break;
@@ -145,17 +147,17 @@ export class Sprite extends Base {
     };
 
     private handleKeyup = (event: KeyboardEvent) => {
-        if (!this.getPlayerControlled()) return;
+        // if (!this.getPlayerControlled()) return;
         
         switch (event.key) {
-            case 'd':
-                this.setKeys({ ...this.getKeys(), d: { pressed: false } });
+            case this.getKeyBindings().right:
+                this.setKeys({ ...this.getKeys(), right: { pressed: false } });
                 break;
-            case 'a':
-                this.setKeys({ ...this.getKeys(), a: { pressed: false } });
+            case this.getKeyBindings().left:
+                this.setKeys({ ...this.getKeys(), left: { pressed: false } });
                 break;
-            case 'w':
-                this.setKeys({ ...this.getKeys(), w: { pressed: false } });
+            case this.getKeyBindings().jump:
+                this.setKeys({ ...this.getKeys(), jump: { pressed: false } });
                 break;
             default:
                 break;
