@@ -27,6 +27,10 @@ export class Sprite extends Base {
     
     private readonly gravity: number = 0.2;
 
+    private readonly moveSpeed: number = 5;
+
+    private readonly jumpHeight: number = 10;
+
     private keys: Keys = {
         a: {
             pressed: false,
@@ -112,13 +116,13 @@ export class Sprite extends Base {
         this.setVelocity({ ...this.getVelocity(), x: 0 });
         
         if (this.getKeys().d.pressed && !this.getKeys().a.pressed) {
-            this.setVelocity({ ...this.getVelocity(), x: 5 });
+            this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
         }
         if (this.getKeys().a.pressed && !this.getKeys().d.pressed) {
-            this.setVelocity({ ...this.getVelocity(), x: -5 });
+            this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
         }
         if (this.getKeys().w.pressed && this.getVelocity().y === 0) {
-            this.setVelocity({ ...this.getVelocity(), y: -10 });
+            this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
         }
     };
 
