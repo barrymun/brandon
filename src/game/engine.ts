@@ -78,7 +78,7 @@ export class Engine {
         return sprite;
     };
 
-    private detectCollision = (): void => {
+    private detectSpriteCollision = (): void => {
         if (
             this.getPlayer().getAttackBox().position.x + this.getPlayer().getAttackBox().width >= this.getEnemy().getPosition().x
             && this.getPlayer().getAttackBox().position.x <= this.getEnemy().getPosition().x + this.getEnemy().width
@@ -89,6 +89,28 @@ export class Engine {
             this.getPlayer().setIsAttacking(false);
             console.log('in range');
         }
+    };
+
+    private detectWallCollision = (sprite: Sprite): void => {
+        if (
+            sprite.getPosition().x <= 0
+            && sprite.getVelocity().x < 0
+        ) {
+            sprite.setVelocity({ x: 0, y: sprite.getVelocity().y });
+        } else if (
+            sprite.getPosition().x + sprite.width >= this.getCanvas().width
+            && sprite.getVelocity().x > 0
+        ) {
+            sprite.setVelocity({ x: 0, y: sprite.getVelocity().y });
+        }
+    };
+
+    private detectPlayerWallCollision = (): void => {
+        this.detectWallCollision(this.getPlayer());
+    };
+
+    private detectEnemyWallCollision = (): void => {
+        this.detectWallCollision(this.getEnemy());
     };
 
     private determineDirectionFaced = (): void => {
@@ -110,7 +132,9 @@ export class Engine {
         this.getPlayer().udpate();
         this.getEnemy().udpate();
 
-        this.detectCollision();
+        this.detectSpriteCollision();
+        this.detectPlayerWallCollision();
+        this.detectEnemyWallCollision();
         this.determineDirectionFaced();
     };
 

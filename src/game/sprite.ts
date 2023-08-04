@@ -94,7 +94,7 @@ export class Sprite extends Base {
 
     public getVelocity = (): Coords => this.velocity;
 
-    private setVelocity = (velocity: Coords): void => {
+    public setVelocity = (velocity: Coords): void => {
         this.velocity = velocity;
     };
 
