@@ -1,5 +1,5 @@
 import { Sprite, SpriteProps } from "game";
-import { Colour, enemyKeyBindings, playerKeyBindings } from "utils";
+import { Colour, Direction, enemyKeyBindings, playerKeyBindings } from "utils";
 
 type CreateSpriteProps = Omit<SpriteProps, 'engine'>;
 
@@ -47,6 +47,7 @@ export class Engine {
             playerControlled: true,
             keyBindings: playerKeyBindings,
             colour: Colour.Green,
+            directionFaced: Direction.Right,
         });
         this.setPlayer(player);
         
@@ -56,6 +57,7 @@ export class Engine {
             playerControlled: false,
             keyBindings: enemyKeyBindings,
             colour: Colour.Red,
+            directionFaced: Direction.Left,
         });
         this.setEnemy(enemy);
         
@@ -70,8 +72,8 @@ export class Engine {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    private createSprite = ({ position, velocity, playerControlled, keyBindings, colour }: CreateSpriteProps): Sprite => {
-        const sprite = new Sprite({ engine: this, position, velocity, playerControlled, keyBindings, colour });
+    private createSprite = (props: CreateSpriteProps): Sprite => {
+        const sprite = new Sprite({ engine: this, ...props });
         sprite.draw();
         return sprite;
     };
@@ -89,6 +91,16 @@ export class Engine {
         }
     };
 
+    private determineDirectionFaced = (): void => {
+        if (this.getPlayer().getPosition().x < this.getEnemy().getPosition().x) {
+            this.getPlayer().setDirectionFaced(Direction.Right);
+            this.getEnemy().setDirectionFaced(Direction.Left);
+        } else {
+            this.getPlayer().setDirectionFaced(Direction.Left);
+            this.getEnemy().setDirectionFaced(Direction.Right);
+        }
+    };
+
     public run = (): void => {
         requestAnimationFrame(this.run);
 
@@ -99,6 +111,7 @@ export class Engine {
         this.getEnemy().udpate();
 
         this.detectCollision();
+        this.determineDirectionFaced();
     };
 
     private unloadListener = (_event: Event) => {

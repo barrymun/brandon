@@ -20,3 +20,10 @@ export enum Colour {
     Blue = 'blue',
     Black = 'black',
 };
+
+export enum Direction {
+    Left = 'left',
+    Right = 'right',
+}
+
+export type DirectionFaced = Direction.Left | Direction.Right;

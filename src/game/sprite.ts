@@ -1,5 +1,5 @@
 import { Base, Engine } from "game";
-import { AttackBox, Colour, Coords, KeyBindings } from "utils";
+import { AttackBox, Colour, Coords, Direction, DirectionFaced, KeyBindings } from "utils";
 
 export interface SpriteProps {
     engine: Engine; 
@@ -8,6 +8,7 @@ export interface SpriteProps {
     playerControlled: boolean;
     keyBindings: KeyBindings;
     colour: Colour;
+    directionFaced: DirectionFaced;
 };
 
 export interface Keys {
@@ -72,7 +73,12 @@ export class Sprite extends Base {
         this.setAttackBox({
             width: this.attackBoxWidth,
             height: this.attackBoxHeight,
-            position,
+            position: {
+                ...position,
+                x: this.getDirerectionFaced() === Direction.Right 
+                    ? position.x 
+                    : position.x + this.width - this.attackBoxWidth,
+            },
         });
     };
 
@@ -116,13 +122,22 @@ export class Sprite extends Base {
         this.isAttacking = isAttacking;
     };
     
-    constructor({ engine, position, velocity, playerControlled, keyBindings, colour }: SpriteProps) {
+    private directionFaced: DirectionFaced;
+
+    public getDirerectionFaced = (): DirectionFaced => this.directionFaced;
+
+    public setDirectionFaced = (directionFaced: DirectionFaced): void => {
+        this.directionFaced = directionFaced;
+    };
+    
+    constructor({ engine, position, velocity, playerControlled, keyBindings, colour, directionFaced }: SpriteProps) {
         super(engine);
         this.setPosition(position);
         this.setVelocity(velocity);
         this.setPlayerControlled(playerControlled);
         this.setKeyBindings(keyBindings);
         this.setColour(colour);
+        this.setDirectionFaced(directionFaced);
         this.bindListeners();
         console.log('Sprite loaded');
     };
@@ -138,17 +153,17 @@ export class Sprite extends Base {
                 this.height
             );
         
-        if (this.getIsAttacking()) {
-            this.getEngine().getContext().fillStyle = Colour.Blue;
-            this.getEngine()
-                .getContext()
-                .fillRect(
-                    this.getAttackBox().position.x, 
-                    this.getAttackBox().position.y, 
-                    this.getAttackBox().width, 
-                    this.getAttackBox().height
-                );
-        }
+        // if (this.getIsAttacking()) {
+        this.getEngine().getContext().fillStyle = Colour.Blue;
+        this.getEngine()
+            .getContext()
+            .fillRect(
+                this.getAttackBox().position.x, 
+                this.getAttackBox().position.y, 
+                this.getAttackBox().width, 
+                this.getAttackBox().height
+            );
+        // }
     };
 
     public udpate = (): void => {
