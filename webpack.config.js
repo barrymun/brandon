@@ -1,5 +1,6 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = (env, argv) => {
@@ -10,6 +11,7 @@ module.exports = (env, argv) => {
             main: [
                 './src/index.ts',
                 './src/game/index.ts',
+                './src/utils/index.ts',
             ],
         },
         module: {
@@ -18,6 +20,10 @@ module.exports = (env, argv) => {
                     test: /\.tsx?$/,
                     use: 'ts-loader',
                     exclude: /node_modules/,
+                },
+                {
+                    test: /\.css$/,
+                    use: [MiniCssExtractPlugin.loader, 'css-loader'],
                 },
             ],
         },
@@ -31,8 +37,11 @@ module.exports = (env, argv) => {
         },
         plugins: [
             new CleanWebpackPlugin(),
-            new CopyPlugin({
+            new CopyWebpackPlugin({
                 patterns: [{ from: 'src/index.html', to: 'index.html' }],
+            }),
+            new MiniCssExtractPlugin({
+                filename: 'index.css',
             }),
         ],
     };
