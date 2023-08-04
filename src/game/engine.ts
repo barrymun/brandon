@@ -128,14 +128,14 @@ export class Engine {
 
         this.getContext().fillStyle = Colour.Black;
         this.getContext().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
-        
-        this.getPlayer().udpate();
-        this.getEnemy().udpate();
 
         this.detectSpriteCollision();
         this.detectPlayerWallCollision();
         this.detectEnemyWallCollision();
         this.determineDirectionFaced();
+        
+        this.getPlayer().udpate();
+        this.getEnemy().udpate();
     };
 
     private unloadListener = (_event: Event) => {
@@ -144,9 +144,11 @@ export class Engine {
 
     private bindListeners = (): void => {
         window.addEventListener('unload', this.unloadListener);
+        window.addEventListener('resize', this.setCanvasSize);
     };
 
     private unbindListeners = (): void => {
         window.removeEventListener('unload', this.unloadListener);
+        window.removeEventListener('resize', this.setCanvasSize);
     };
 };
