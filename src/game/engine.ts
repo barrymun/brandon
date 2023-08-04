@@ -78,17 +78,31 @@ export class Engine {
         return sprite;
     };
 
-    private detectSpriteCollision = (): void => {
+    private detectSpriteAttacking = ({ attacker, defender }: { attacker: Sprite; defender: Sprite; }): void => {
         if (
-            this.getPlayer().getAttackBox().position.x + this.getPlayer().getAttackBox().width >= this.getEnemy().getPosition().x
-            && this.getPlayer().getAttackBox().position.x <= this.getEnemy().getPosition().x + this.getEnemy().width
-            && this.getPlayer().getAttackBox().position.y + this.getPlayer().getAttackBox().height >= this.getEnemy().getPosition().y
-            && this.getPlayer().getAttackBox().position.y <= this.getEnemy().getPosition().y + this.getEnemy().height
-            && this.getPlayer().getIsAttacking()
+            attacker.getAttackBox().position.x + attacker.getAttackBox().width >= defender.getPosition().x
+            && attacker.getAttackBox().position.x <= defender.getPosition().x + defender.width
+            && attacker.getAttackBox().position.y + attacker.getAttackBox().height >= defender.getPosition().y
+            && attacker.getAttackBox().position.y <= defender.getPosition().y + defender.height
+            && attacker.getIsAttacking()
         ) {
-            this.getPlayer().setIsAttacking(false);
-            console.log('in range');
+            console.log('hit');
+            attacker.setIsAttacking(false);
         }
+    };
+
+    private detectPlayerAttacking = (): void => {
+        this.detectSpriteAttacking({
+            attacker: this.getPlayer(),
+            defender: this.getEnemy(),
+        });
+    };
+
+    private detectEnemyAttacking = (): void => {
+        this.detectSpriteAttacking({
+            attacker: this.getEnemy(),
+            defender: this.getPlayer(),
+        });
     };
 
     private detectWallCollision = (sprite: Sprite): void => {
@@ -129,7 +143,8 @@ export class Engine {
         this.getContext().fillStyle = Colour.Black;
         this.getContext().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
 
-        this.detectSpriteCollision();
+        this.detectPlayerAttacking();
+        this.detectEnemyAttacking();
         this.detectPlayerWallCollision();
         this.detectEnemyWallCollision();
         this.determineDirectionFaced();
