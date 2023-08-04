@@ -138,15 +138,17 @@ export class Sprite extends Base {
                 this.height
             );
         
-        this.getEngine().getContext().fillStyle = Colour.Blue;
-        this.getEngine()
-            .getContext()
-            .fillRect(
-                this.getAttackBox().position.x, 
-                this.getAttackBox().position.y, 
-                this.getAttackBox().width, 
-                this.getAttackBox().height
-            );
+        if (this.getIsAttacking()) {
+            this.getEngine().getContext().fillStyle = Colour.Blue;
+            this.getEngine()
+                .getContext()
+                .fillRect(
+                    this.getAttackBox().position.x, 
+                    this.getAttackBox().position.y, 
+                    this.getAttackBox().width, 
+                    this.getAttackBox().height
+                );
+        }
     };
 
     public udpate = (): void => {
