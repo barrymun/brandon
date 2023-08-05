@@ -1,3 +1,5 @@
+import { Direction } from "utils";
+
 export interface Coords {
     x: number;
     y: number;
@@ -8,3 +10,5 @@ export interface AttackBox {
     width: number;
     height: number;
 };
+
+export type DirectionFaced = Direction.Left | Direction.Right;

@@ -4,6 +4,10 @@ import { Colour, Direction, enemyKeyBindings, playerKeyBindings } from "utils";
 type CreateSpriteProps = Omit<SpriteProps, 'engine'>;
 
 export class Engine {
+    public readonly playerHealth = document.getElementById('player-health')! as HTMLDivElement;
+    
+    public readonly enemyHealth = document.getElementById('enemy-health')! as HTMLDivElement;
+
     private canvas: HTMLCanvasElement;
 
     public getCanvas = (): HTMLCanvasElement => this.canvas;
@@ -78,7 +82,7 @@ export class Engine {
         return sprite;
     };
 
-    private detectSpriteAttacking = ({ attacker, defender }: { attacker: Sprite; defender: Sprite; }): void => {
+    private checkSpriteAttacked = ({ attacker, defender }: { attacker: Sprite; defender: Sprite; }): boolean => {
         if (
             attacker.getAttackBox().position.x + attacker.getAttackBox().width >= defender.getPosition().x
             && attacker.getAttackBox().position.x <= defender.getPosition().x + defender.width
@@ -87,22 +91,33 @@ export class Engine {
             && attacker.getIsAttacking()
         ) {
             console.log('hit');
+            defender.setHealth(defender.getHealth() - attacker.getDamage());
             attacker.setIsAttacking(false);
+            return true;
         }
+        return false;
     };
 
     private detectPlayerAttacking = (): void => {
-        this.detectSpriteAttacking({
+        const wasAttacked = this.checkSpriteAttacked({
             attacker: this.getPlayer(),
             defender: this.getEnemy(),
         });
+        if (wasAttacked) {
+            const damageTaken: number = 100 - this.getEnemy().getHealth();
+            Object.assign(this.enemyHealth.style, { width: `calc(100% - ${damageTaken}%)` });
+        }
     };
 
     private detectEnemyAttacking = (): void => {
-        this.detectSpriteAttacking({
+        const wasAttacked = this.checkSpriteAttacked({
             attacker: this.getEnemy(),
             defender: this.getPlayer(),
         });
+        if (wasAttacked) {
+            const damageTaken: number = 100 - this.getPlayer().getHealth();
+            Object.assign(this.playerHealth.style, { width: `calc(100% - ${damageTaken}%)` });
+        }
     };
 
     private detectWallCollision = (sprite: Sprite): void => {

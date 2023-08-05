@@ -26,4 +26,6 @@ export enum Direction {
     Right = 'right',
 }
 
-export type DirectionFaced = Direction.Left | Direction.Right;
+export const defaultHealth: number = 100;
+
+export const defaultAttackDamage: number = 10;;

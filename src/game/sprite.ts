@@ -1,5 +1,5 @@
 import { Base, Engine } from "game";
-import { AttackBox, Colour, Coords, Direction, DirectionFaced, KeyBindings } from "utils";
+import { AttackBox, Colour, Coords, Direction, DirectionFaced, KeyBindings, defaultAttackDamage, defaultHealth } from "utils";
 
 export interface SpriteProps {
     engine: Engine; 
@@ -128,6 +128,22 @@ export class Sprite extends Base {
 
     public setDirectionFaced = (directionFaced: DirectionFaced): void => {
         this.directionFaced = directionFaced;
+    };
+
+    private health: number = defaultHealth;
+
+    public getHealth = (): number => this.health;
+
+    public setHealth = (health: number): void => {
+        this.health = health;
+    };
+
+    private attackDamage: number = defaultAttackDamage;
+
+    public getDamage = (): number => this.attackDamage;
+
+    public setDamage = (attackDamage: number): void => {
+        this.attackDamage = attackDamage;
     };
     
     constructor({ engine, position, velocity, playerControlled, keyBindings, colour, directionFaced }: SpriteProps) {
