@@ -37,3 +37,9 @@
     height: 100%;
     background-color: yellow;
 }
+
+.dialog {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+}

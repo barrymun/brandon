@@ -256,19 +256,19 @@ export class Sprite extends Base {
         }
     };
 
-    private unloadListener = (_event: Event) => {
-        this.unbindListeners();
+    private handleUnload = (_event: Event) => {
+        this.destroy();
     };
 
     private bindListeners = (): void => {
         window.addEventListener('keydown', this.handleKeydown);
         window.addEventListener('keyup', this.handleKeyup);
-        window.addEventListener('unload', this.unloadListener);
+        window.addEventListener('unload', this.handleUnload);
     };
 
-    private unbindListeners = (): void => {
+    public destroy = (): void => {
         window.removeEventListener('keydown', this.handleKeydown);
         window.removeEventListener('keyup', this.handleKeyup);
-        window.removeEventListener('unload', this.unloadListener);
+        window.removeEventListener('unload', this.handleUnload);
     };
 };

@@ -7,6 +7,12 @@ export class Engine {
     public readonly playerHealth = document.getElementById('player-health')! as HTMLDivElement;
     
     public readonly enemyHealth = document.getElementById('enemy-health')! as HTMLDivElement;
+    
+    public readonly gameOverDialog = document.getElementById('game-over-dialog')! as HTMLDialogElement;
+    
+    public readonly gameOverTitle = document.getElementById('game-over-title')! as HTMLDivElement;
+    
+    public readonly gameOverBtn = document.getElementById('game-over-btn')! as HTMLButtonElement;
 
     private canvas: HTMLCanvasElement;
 
@@ -152,6 +158,23 @@ export class Engine {
         }
     };
 
+    private checkGameOver = (): void => {
+        let gameOver: boolean = false;
+        if (this.getPlayer().getHealth() <= 0) {
+            this.gameOverTitle.innerText = 'Game over, you lose!';
+            gameOver = true;
+        } else if (this.getEnemy().getHealth() <= 0) {
+            this.gameOverTitle.innerText = 'Game over, you win!';
+            gameOver = true;
+        }
+
+        if (gameOver) {
+            this.gameOverDialog.showModal();
+            this.getPlayer().destroy();
+            this.getEnemy().destroy();
+        }
+    };
+
     public run = (): void => {
         requestAnimationFrame(this.run);
 
@@ -166,19 +189,30 @@ export class Engine {
         
         this.getPlayer().udpate();
         this.getEnemy().udpate();
+
+        this.checkGameOver();
     };
 
-    private unloadListener = (_event: Event) => {
-        this.unbindListeners();
+    private handleGameOverBtnClick = (): void => {
+        this.destroy();
+        window.location.reload();
+    };
+
+    private handleUnload = (_event: Event) => {
+        this.destroy();
     };
 
     private bindListeners = (): void => {
-        window.addEventListener('unload', this.unloadListener);
+        this.gameOverBtn.addEventListener('click', this.handleGameOverBtnClick);
+        
         window.addEventListener('resize', this.setCanvasSize);
+        window.addEventListener('unload', this.handleUnload);
     };
 
-    private unbindListeners = (): void => {
-        window.removeEventListener('unload', this.unloadListener);
+    private destroy = (): void => {
+        this.gameOverBtn.removeEventListener('click', this.handleGameOverBtnClick);
+        
         window.removeEventListener('resize', this.setCanvasSize);
+        window.removeEventListener('unload', this.handleUnload);
     };
 };
