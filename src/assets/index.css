@@ -1,9 +1,28 @@
 .interface {
     position: absolute;
+    width: calc(100% - 32px);
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding: 8px 16px;
 }
 
 .player-health {
     background-color: yellow;
     height: 30px;
-    width: 100px;
+    flex: 1;
+}
+
+.timer {
+    background-color: red;
+    height: 80px;
+    width: 80px;
+}
+
+.enemy-health {
+    background-color: yellow;
+    height: 30px;
+    flex: 1;
 }
