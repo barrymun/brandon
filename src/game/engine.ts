@@ -24,6 +24,14 @@ export class Engine {
         this.timer = timer;
     };
 
+    private gameTimeout: ReturnType<typeof setTimeout>;
+
+    public getGameTimeout = (): ReturnType<typeof setTimeout> => this.gameTimeout;
+
+    private setGameTimeout = (gameTimeout: ReturnType<typeof setTimeout>): void => {
+        this.gameTimeout = gameTimeout;
+    };
+
     private canvas: HTMLCanvasElement;
 
     public getCanvas = (): HTMLCanvasElement => this.canvas;
@@ -88,7 +96,7 @@ export class Engine {
     };
 
     private decreaseTimer = (): void => {
-        setTimeout(this.decreaseTimer, 1000);
+        this.setGameTimeout(setTimeout(this.decreaseTimer, 1000));
         if (this.getTimer() > 0) {
             this.setTimer(this.getTimer() - 1);
             this.gameTimer.innerHTML = this.getTimer().toString();
@@ -195,10 +203,16 @@ export class Engine {
         }
 
         if (gameOver) {
-            this.gameOverDialog.showModal();
-            this.getPlayer().destroy();
-            this.getEnemy().destroy();
+            this.endGame();
         }
+    };
+
+    private endGame = (): void => {
+        this.gameOverDialog.close(); // ensure closed before re-opening otherwise error will be thrown
+        this.gameOverDialog.showModal();
+        clearTimeout(this.getGameTimeout());
+        this.getPlayer().destroy();
+        this.getEnemy().destroy();
     };
 
     public run = (): void => {
