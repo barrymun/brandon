@@ -26,6 +26,8 @@ export enum Direction {
     Right = 'right',
 }
 
+export const defaultTimer: number = 10; // seconds
+
 export const defaultHealth: number = 100;
 
 export const defaultAttackDamage: number = 10;;

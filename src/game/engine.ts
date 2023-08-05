@@ -1,9 +1,11 @@
 import { Sprite, SpriteProps } from "game";
-import { Colour, Direction, enemyKeyBindings, playerKeyBindings } from "utils";
+import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
 type CreateSpriteProps = Omit<SpriteProps, 'engine'>;
 
 export class Engine {
+    public readonly gameTimer = document.getElementById('game-timer')! as HTMLDivElement;
+    
     public readonly playerHealth = document.getElementById('player-health')! as HTMLDivElement;
     
     public readonly enemyHealth = document.getElementById('enemy-health')! as HTMLDivElement;
@@ -13,6 +15,14 @@ export class Engine {
     public readonly gameOverTitle = document.getElementById('game-over-title')! as HTMLDivElement;
     
     public readonly gameOverBtn = document.getElementById('game-over-btn')! as HTMLButtonElement;
+
+    private timer: number = defaultTimer;
+
+    public getTimer = (): number => this.timer;
+
+    private setTimer = (timer: number): void => {
+        this.timer = timer;
+    };
 
     private canvas: HTMLCanvasElement;
 
@@ -70,9 +80,19 @@ export class Engine {
             directionFaced: Direction.Left,
         });
         this.setEnemy(enemy);
+
+        this.decreaseTimer();
         
         this.bindListeners();
         console.log('Engine loaded');
+    };
+
+    private decreaseTimer = (): void => {
+        setTimeout(this.decreaseTimer, 1000);
+        if (this.getTimer() > 0) {
+            this.setTimer(this.getTimer() - 1);
+            this.gameTimer.innerHTML = this.getTimer().toString();
+        }
     };
 
     private setCanvasSize = (): void => {
@@ -160,11 +180,17 @@ export class Engine {
 
     private checkGameOver = (): void => {
         let gameOver: boolean = false;
+        
         if (this.getPlayer().getHealth() <= 0) {
-            this.gameOverTitle.innerText = 'Game over, you lose!';
+            this.gameOverTitle.innerHTML = 'Game over, you lose!';
             gameOver = true;
         } else if (this.getEnemy().getHealth() <= 0) {
-            this.gameOverTitle.innerText = 'Game over, you win!';
+            this.gameOverTitle.innerHTML = 'Game over, you win!';
+            gameOver = true;
+        }
+
+        if (this.getTimer() <= 0) {
+            this.gameOverTitle.innerHTML = 'Draw, time is up!';
             gameOver = true;
         }
 
