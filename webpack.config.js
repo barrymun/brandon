@@ -38,7 +38,10 @@ module.exports = (env, argv) => {
         plugins: [
             new CleanWebpackPlugin(),
             new CopyWebpackPlugin({
-                patterns: [{ from: 'src/index.html', to: 'index.html' }],
+                patterns: [
+                    { from: 'src/index.html', to: 'index.html' },
+                    { from: 'src/assets/img', to: 'assets/img' },
+                ],
             }),
             new MiniCssExtractPlugin({
                 filename: 'index.css',
