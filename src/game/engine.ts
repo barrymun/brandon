@@ -1,7 +1,7 @@
-import { Sprite, SpriteProps } from "game";
+import { Fighter, FighterProps } from "game";
 import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
-type CreateSpriteProps = Omit<SpriteProps, 'engine'>;
+type CreateFighterProps = Omit<FighterProps, 'engine'>;
 
 export class Engine {
     public readonly gameTimer = document.getElementById('game-timer')! as HTMLDivElement;
@@ -48,19 +48,19 @@ export class Engine {
         this.context = context;
     };
 
-    private player: Sprite;
+    private player: Fighter;
 
-    public getPlayer = (): Sprite => this.player;
+    public getPlayer = (): Fighter => this.player;
 
-    private setPlayer = (player: Sprite): void => {
+    private setPlayer = (player: Fighter): void => {
         this.player = player;
     };
     
-    private enemy: Sprite;
+    private enemy: Fighter;
 
-    public getEnemy = (): Sprite => this.enemy;
+    public getEnemy = (): Fighter => this.enemy;
 
-    private setEnemy = (enemy: Sprite): void => {
+    private setEnemy = (enemy: Fighter): void => {
         this.enemy = enemy;
     };
     
@@ -69,7 +69,7 @@ export class Engine {
         this.setContext(this.canvas.getContext('2d')!);
         this.setCanvasSize();
         
-        const player: Sprite = this.createSprite({
+        const player: Fighter = this.createFighter({
             position: { x: 0, y: 0 },
             velocity: { x: 0, y: 0 },
             playerControlled: true,
@@ -79,7 +79,7 @@ export class Engine {
         });
         this.setPlayer(player);
         
-        const enemy: Sprite = this.createSprite({
+        const enemy: Fighter = this.createFighter({
             position: { x: 400, y: 100 },
             velocity: { x: 0, y: 0 },
             playerControlled: false,
@@ -110,13 +110,13 @@ export class Engine {
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
-    private createSprite = (props: CreateSpriteProps): Sprite => {
-        const sprite = new Sprite({ engine: this, ...props });
-        sprite.draw();
-        return sprite;
+    private createFighter = (props: CreateFighterProps): Fighter => {
+        const fighter = new Fighter({ engine: this, ...props });
+        fighter.draw();
+        return fighter;
     };
 
-    private checkSpriteAttacked = ({ attacker, defender }: { attacker: Sprite; defender: Sprite; }): boolean => {
+    private checkFighterAttacked = ({ attacker, defender }: { attacker: Fighter; defender: Fighter; }): boolean => {
         if (
             attacker.getAttackBox().position.x + attacker.getAttackBox().width >= defender.getPosition().x
             && attacker.getAttackBox().position.x <= defender.getPosition().x + defender.width
@@ -133,7 +133,7 @@ export class Engine {
     };
 
     private detectPlayerAttacking = (): void => {
-        const wasAttacked = this.checkSpriteAttacked({
+        const wasAttacked = this.checkFighterAttacked({
             attacker: this.getPlayer(),
             defender: this.getEnemy(),
         });
@@ -144,7 +144,7 @@ export class Engine {
     };
 
     private detectEnemyAttacking = (): void => {
-        const wasAttacked = this.checkSpriteAttacked({
+        const wasAttacked = this.checkFighterAttacked({
             attacker: this.getEnemy(),
             defender: this.getPlayer(),
         });
@@ -154,17 +154,17 @@ export class Engine {
         }
     };
 
-    private detectWallCollision = (sprite: Sprite): void => {
+    private detectWallCollision = (fighter: Fighter): void => {
         if (
-            sprite.getPosition().x <= 0
-            && sprite.getVelocity().x < 0
+            fighter.getPosition().x <= 0
+            && fighter.getVelocity().x < 0
         ) {
-            sprite.setVelocity({ x: 0, y: sprite.getVelocity().y });
+            fighter.setVelocity({ x: 0, y: fighter.getVelocity().y });
         } else if (
-            sprite.getPosition().x + sprite.width >= this.getCanvas().width
-            && sprite.getVelocity().x > 0
+            fighter.getPosition().x + fighter.width >= this.getCanvas().width
+            && fighter.getVelocity().x > 0
         ) {
-            sprite.setVelocity({ x: 0, y: sprite.getVelocity().y });
+            fighter.setVelocity({ x: 0, y: fighter.getVelocity().y });
         }
     };
 
