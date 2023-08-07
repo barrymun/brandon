@@ -1,15 +1,27 @@
-import { Engine } from "game";
-
 export abstract class Base {
-    private engine: Engine;
+    public readonly canvas = document.getElementById('c')! as HTMLCanvasElement;
 
-    protected getEngine = (): Engine => this.engine;
+    public readonly gameTimer = document.getElementById('game-timer')! as HTMLDivElement;
+    
+    public readonly playerHealth = document.getElementById('player-health')! as HTMLDivElement;
+    
+    public readonly enemyHealth = document.getElementById('enemy-health')! as HTMLDivElement;
+    
+    public readonly gameOverDialog = document.getElementById('game-over-dialog')! as HTMLDialogElement;
+    
+    public readonly gameOverTitle = document.getElementById('game-over-title')! as HTMLDivElement;
+    
+    public readonly gameOverBtn = document.getElementById('game-over-btn')! as HTMLButtonElement;
+    
+    private context: CanvasRenderingContext2D;
+    
+    public getContext = (): CanvasRenderingContext2D => this.context;
 
-    private setEngine = (engine: Engine): void => {
-        this.engine = engine;
+    protected setContext = (context: CanvasRenderingContext2D): void => {
+        this.context = context;
     };
 
-    constructor(engine: Engine) {
-        this.setEngine(engine);
-    }
+    constructor() {
+        this.setContext(this.canvas.getContext('2d')!);
+    };
 };

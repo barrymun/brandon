@@ -1,21 +1,10 @@
-import { Fighter, FighterProps } from "game";
+import { Base } from "game/base";
+import { Fighter, FighterProps } from "game/fighter";
 import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
 type CreateFighterProps = Omit<FighterProps, 'engine'>;
 
-export class Engine {
-    public readonly gameTimer = document.getElementById('game-timer')! as HTMLDivElement;
-    
-    public readonly playerHealth = document.getElementById('player-health')! as HTMLDivElement;
-    
-    public readonly enemyHealth = document.getElementById('enemy-health')! as HTMLDivElement;
-    
-    public readonly gameOverDialog = document.getElementById('game-over-dialog')! as HTMLDialogElement;
-    
-    public readonly gameOverTitle = document.getElementById('game-over-title')! as HTMLDivElement;
-    
-    public readonly gameOverBtn = document.getElementById('game-over-btn')! as HTMLButtonElement;
-
+export class Engine extends Base {
     private timer: number = defaultTimer;
 
     public getTimer = (): number => this.timer;
@@ -30,22 +19,6 @@ export class Engine {
 
     private setGameTimeout = (gameTimeout: ReturnType<typeof setTimeout>): void => {
         this.gameTimeout = gameTimeout;
-    };
-
-    private canvas: HTMLCanvasElement;
-
-    public getCanvas = (): HTMLCanvasElement => this.canvas;
-
-    private setCanvas = (canvas: HTMLCanvasElement): void => {
-        this.canvas = canvas;
-    };
-    
-    private context: CanvasRenderingContext2D;
-    
-    public getContext = (): CanvasRenderingContext2D => this.context;
-
-    private setContext = (context: CanvasRenderingContext2D): void => {
-        this.context = context;
     };
 
     private player: Fighter;
@@ -65,8 +38,7 @@ export class Engine {
     };
     
     constructor() {
-        this.setCanvas(document.getElementById('c')! as HTMLCanvasElement);
-        this.setContext(this.canvas.getContext('2d')!);
+        super();
         this.setCanvasSize();
         
         const player: Fighter = this.createFighter({
@@ -104,14 +76,14 @@ export class Engine {
     };
 
     private setCanvasSize = (): void => {
-        this.getCanvas().width = window.innerWidth;
-        this.getCanvas().height = window.innerHeight;
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
 
         this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
     }
 
     private createFighter = (props: CreateFighterProps): Fighter => {
-        const fighter = new Fighter({ engine: this, ...props });
+        const fighter = new Fighter(props);
         fighter.draw();
         return fighter;
     };
@@ -161,7 +133,7 @@ export class Engine {
         ) {
             fighter.setVelocity({ x: 0, y: fighter.getVelocity().y });
         } else if (
-            fighter.getPosition().x + fighter.width >= this.getCanvas().width
+            fighter.getPosition().x + fighter.width >= this.canvas.width
             && fighter.getVelocity().x > 0
         ) {
             fighter.setVelocity({ x: 0, y: fighter.getVelocity().y });
@@ -219,7 +191,7 @@ export class Engine {
         requestAnimationFrame(this.run);
 
         this.getContext().fillStyle = Colour.Black;
-        this.getContext().fillRect(0, 0, this.getCanvas().width, this.getCanvas().height);
+        this.getContext().fillRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.detectPlayerAttacking();
         this.detectEnemyAttacking();

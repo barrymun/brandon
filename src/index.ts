@@ -1,4 +1,4 @@
-import { Engine } from "game";
+import { Engine } from 'game/engine';
 
 import 'assets/index.css';
 

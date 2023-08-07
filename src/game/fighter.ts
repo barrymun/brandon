@@ -1,8 +1,16 @@
-import { Base, Engine } from "game";
-import { AttackBox, Colour, Coords, Direction, DirectionFaced, KeyBindings, defaultAttackDamage, defaultHealth } from "utils";
+import { Base } from "game/base";
+import { 
+    AttackBox, 
+    Colour, 
+    Coords, 
+    Direction, 
+    DirectionFaced, 
+    KeyBindings, 
+    defaultAttackDamage, 
+    defaultHealth, 
+} from "utils";
 
 export interface FighterProps {
-    engine: Engine; 
     position: Coords; 
     velocity: Coords; 
     playerControlled: boolean;
@@ -146,8 +154,8 @@ export class Fighter extends Base {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ engine, position, velocity, playerControlled, keyBindings, colour, directionFaced }: FighterProps) {
-        super(engine);
+    constructor({ position, velocity, playerControlled, keyBindings, colour, directionFaced }: FighterProps) {
+        super();
         this.setPosition(position);
         this.setVelocity(velocity);
         this.setPlayerControlled(playerControlled);
@@ -159,9 +167,8 @@ export class Fighter extends Base {
     };
 
     public draw = (): void => {
-        this.getEngine().getContext().fillStyle = this.getColour();
-        this.getEngine()
-            .getContext()
+        this.getContext().fillStyle = this.getColour();
+        this.getContext()
             .fillRect(
                 this.getPosition().x, 
                 this.getPosition().y, 
@@ -170,9 +177,8 @@ export class Fighter extends Base {
             );
         
         if (this.getIsAttacking()) {
-            this.getEngine().getContext().fillStyle = Colour.Blue;
-            this.getEngine()
-                .getContext()
+            this.getContext().fillStyle = Colour.Blue;
+            this.getContext()
                 .fillRect(
                     this.getAttackBox().position.x, 
                     this.getAttackBox().position.y, 
@@ -191,7 +197,7 @@ export class Fighter extends Base {
             y: this.getPosition().y + this.getVelocity().y,
         });
 
-        if (this.getPosition().y + this.height + this.getVelocity().y >= this.getEngine().getCanvas().height) {
+        if (this.getPosition().y + this.height + this.getVelocity().y >= this.canvas.height) {
             this.setVelocity({ ...this.getVelocity(), y: 0 });
         } else {
             this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });
