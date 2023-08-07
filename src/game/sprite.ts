@@ -3,6 +3,7 @@ import { Coords } from "utils";
 
 export interface SpriteProps {
     position: Coords; 
+    imageSrc: string;
 };
 
 export class Sprite extends Base {
@@ -17,15 +18,32 @@ export class Sprite extends Base {
     private setPosition = (position: Coords): void => {
         this.position = position;
     };
+
+    private image: HTMLImageElement;
+
+    public getImage = (): HTMLImageElement => this.image;
+
+    private setImage = (imageSrc: string): void => {
+        const image = new Image();
+        image.src = imageSrc;
+        this.image = image;
+    };
     
-    constructor({ position }: SpriteProps) {
+    constructor({ position, imageSrc }: SpriteProps) {
+        console.log({ imageSrc })
         super();
         this.setPosition(position);
+        this.setImage(imageSrc);
         this.bindListeners();
         console.log('Sprite loaded');
     };
 
     public draw = (): void => {
+        this.getContext().drawImage(
+            this.getImage(),
+            this.getPosition().x,
+            this.getPosition().y,
+        );
     };
 
     public udpate = (): void => {

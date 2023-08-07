@@ -1,5 +1,6 @@
 import { Base } from "game/base";
 import { Fighter, FighterProps } from "game/fighter";
+import { Sprite } from "game/sprite";
 import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
 type CreateFighterProps = Omit<FighterProps, 'engine'>;
@@ -21,6 +22,14 @@ export class Engine extends Base {
         this.gameTimeout = gameTimeout;
     };
 
+    private background: Sprite;
+
+    public getBackground = (): Sprite => this.background;
+
+    private setBackground = (background: Sprite): void => {
+        this.background = background;
+    };
+    
     private player: Fighter;
 
     public getPlayer = (): Fighter => this.player;
@@ -40,6 +49,12 @@ export class Engine extends Base {
     constructor() {
         super();
         this.setCanvasSize();
+
+        const background: Sprite = new Sprite({
+            position: { x: 0, y: 0 },
+            imageSrc: 'assets/img/background.png',
+        });
+        this.setBackground(background);
         
         const player: Fighter = this.createFighter({
             position: { x: 0, y: 0 },
@@ -76,10 +91,15 @@ export class Engine extends Base {
     };
 
     private setCanvasSize = (): void => {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        // const width: number = window.innerWidth;
+        // const height: number = window.innerHeight;
+        const width: number = 1024;
+        const height: number = 576;
+        
+        this.canvas.width = width;
+        this.canvas.height = height;
 
-        this.getContext().fillRect(0, 0, window.innerWidth, window.innerHeight);
+        this.getContext().fillRect(0, 0, width, height);
     }
 
     private createFighter = (props: CreateFighterProps): Fighter => {
@@ -199,6 +219,7 @@ export class Engine extends Base {
         this.detectEnemyWallCollision();
         this.determineDirectionFaced();
         
+        this.getBackground().udpate();
         this.getPlayer().udpate();
         this.getEnemy().udpate();
 
