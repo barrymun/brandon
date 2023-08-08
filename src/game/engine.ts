@@ -59,7 +59,6 @@ export class Engine extends Base {
         const player: Fighter = this.createFighter({
             position: { x: 0, y: 0 },
             velocity: { x: 0, y: 0 },
-            playerControlled: true,
             keyBindings: playerKeyBindings,
             colour: Colour.Green,
             directionFaced: Direction.Right,
@@ -69,7 +68,6 @@ export class Engine extends Base {
         const enemy: Fighter = this.createFighter({
             position: { x: 400, y: 100 },
             velocity: { x: 0, y: 0 },
-            playerControlled: false,
             keyBindings: enemyKeyBindings,
             colour: Colour.Red,
             directionFaced: Direction.Left,

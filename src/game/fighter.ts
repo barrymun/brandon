@@ -13,7 +13,6 @@ import {
 export interface FighterProps {
     position: Coords; 
     velocity: Coords; 
-    playerControlled: boolean;
     keyBindings: KeyBindings;
     colour: Colour;
     directionFaced: DirectionFaced;
@@ -106,14 +105,6 @@ export class Fighter extends Base {
         this.velocity = velocity;
     };
 
-    private playerControlled: boolean;
-
-    public getPlayerControlled = (): boolean => this.playerControlled;
-
-    private setPlayerControlled = (playerControlled: boolean): void => {
-        this.playerControlled = playerControlled;
-    };
-
     private colour: Colour;
 
     public getColour = (): Colour => this.colour;
@@ -154,11 +145,10 @@ export class Fighter extends Base {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ position, velocity, playerControlled, keyBindings, colour, directionFaced }: FighterProps) {
+    constructor({ position, velocity, keyBindings, colour, directionFaced }: FighterProps) {
         super();
         this.setPosition(position);
         this.setVelocity(velocity);
-        this.setPlayerControlled(playerControlled);
         this.setKeyBindings(keyBindings);
         this.setColour(colour);
         this.setDirectionFaced(directionFaced);
@@ -225,8 +215,6 @@ export class Fighter extends Base {
     };
 
     private handleKeydown = (event: KeyboardEvent) => {
-        // if (!this.getPlayerControlled()) return;
-        
         switch (event.key) {
             case this.getKeyBindings().right:
                 this.setKeys({ ...this.getKeys(), right: { pressed: true } });
@@ -245,8 +233,6 @@ export class Fighter extends Base {
     };
 
     private handleKeyup = (event: KeyboardEvent) => {
-        // if (!this.getPlayerControlled()) return;
-        
         switch (event.key) {
             case this.getKeyBindings().right:
                 this.setKeys({ ...this.getKeys(), right: { pressed: false } });

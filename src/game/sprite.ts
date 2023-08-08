@@ -30,7 +30,6 @@ export class Sprite extends Base {
     };
     
     constructor({ position, imageSrc }: SpriteProps) {
-        console.log({ imageSrc })
         super();
         this.setPosition(position);
         this.setImage(imageSrc);
