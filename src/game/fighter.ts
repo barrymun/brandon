@@ -7,7 +7,8 @@ import {
     DirectionFaced, 
     KeyBindings, 
     defaultAttackDamage, 
-    defaultHealth, 
+    defaultHealth,
+    groundOffset, 
 } from "utils";
 
 export interface FighterProps {
@@ -187,7 +188,8 @@ export class Fighter extends Base {
             y: this.getPosition().y + this.getVelocity().y,
         });
 
-        if (this.getPosition().y + this.height + this.getVelocity().y >= this.canvas.height) {
+        if (this.getPosition().y + this.height + this.getVelocity().y >= 
+            this.canvas.height - groundOffset) {
             this.setVelocity({ ...this.getVelocity(), y: 0 });
         } else {
             this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });
