@@ -45,7 +45,7 @@ export class Sprite extends Base {
         );
     };
 
-    public udpate = (): void => {
+    public update = (): void => {
         this.draw();
     };
 

@@ -215,9 +215,9 @@ export class Engine extends Base {
         this.detectEnemyWallCollision();
         this.determineDirectionFaced();
         
-        this.getBackground().udpate();
-        this.getPlayer().udpate();
-        this.getEnemy().udpate();
+        this.getBackground().update();
+        this.getPlayer().update();
+        this.getEnemy().update();
 
         this.checkGameOver();
     };

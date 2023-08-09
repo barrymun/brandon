@@ -179,7 +179,7 @@ export class Fighter extends Base {
         }
     };
 
-    public udpate = (): void => {
+    public update = (): void => {
         this.draw();
         
         this.setPosition({
