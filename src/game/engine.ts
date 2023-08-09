@@ -74,6 +74,7 @@ export class Engine extends Base {
             position: { x: 600, y: 128 },
             imageSrc: 'assets/img/shop.png',
             scale: 2.75,
+            totalFrames: 6, // from image
         });
         this.setShop(shop);
         
