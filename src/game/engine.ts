@@ -3,8 +3,6 @@ import { Fighter, FighterProps } from "game/fighter";
 import { Sprite } from "game/sprite";
 import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
-type CreateFighterProps = Omit<FighterProps, 'engine'>;
-
 export class Engine extends Base {
     private timer: number = defaultTimer;
 
@@ -100,7 +98,7 @@ export class Engine extends Base {
         this.getContext().fillRect(0, 0, width, height);
     }
 
-    private createFighter = (props: CreateFighterProps): Fighter => {
+    private createFighter = (props: FighterProps): Fighter => {
         const fighter = new Fighter(props);
         fighter.draw();
         return fighter;
