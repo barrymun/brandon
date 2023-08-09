@@ -1,4 +1,4 @@
-import { Base } from "game/base";
+import { Sprite, SpriteProps } from "game/sprite";
 import { 
     AttackBox, 
     Colour, 
@@ -11,8 +11,7 @@ import {
     groundOffset, 
 } from "utils";
 
-export interface FighterProps {
-    position: Coords; 
+export interface FighterProps extends SpriteProps {
     velocity: Coords; 
     keyBindings: KeyBindings;
     colour: Colour;
@@ -31,7 +30,7 @@ export interface Keys {
     },
 }
 
-export class Fighter extends Base {
+export class Fighter extends Sprite {
     public readonly width: number = 50;
     
     public readonly height: number = 150;
@@ -71,26 +70,12 @@ export class Fighter extends Base {
     private setKeys = (keys: Keys): void => {
         this.keys = keys;
     };
-    
-    private position: Coords;
 
-    public getPosition = (): Coords => this.position;
-
-    private setPosition = (position: Coords): void => {
-        this.position = position;
-        this.setAttackBox({
-            width: this.attackBoxWidth,
-            height: this.attackBoxHeight,
-            position: {
-                ...position,
-                x: this.getDirerectionFaced() === Direction.Right 
-                    ? position.x 
-                    : position.x + this.width - this.attackBoxWidth,
-            },
-        });
+    private attackBox: AttackBox = {
+        width: this.attackBoxWidth,
+        height: this.attackBoxHeight,
+        position: this.getPosition(),
     };
-
-    private attackBox: AttackBox;
 
     public getAttackBox = (): AttackBox => this.attackBox;
 
@@ -146,9 +131,8 @@ export class Fighter extends Base {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ position, velocity, keyBindings, colour, directionFaced }: FighterProps) {
-        super();
-        this.setPosition(position);
+    constructor({ velocity, keyBindings, colour, directionFaced, ...spriteProps }: FighterProps) {
+        super(spriteProps);
         this.setVelocity(velocity);
         this.setKeyBindings(keyBindings);
         this.setColour(colour);
@@ -157,35 +141,25 @@ export class Fighter extends Base {
         console.log('Fighter loaded');
     };
 
-    public draw = (): void => {
-        this.getContext().fillStyle = this.getColour();
-        this.getContext()
-            .fillRect(
-                this.getPosition().x, 
-                this.getPosition().y, 
-                this.width, 
-                this.height
-            );
-        
-        if (this.getIsAttacking()) {
-            this.getContext().fillStyle = Colour.Blue;
-            this.getContext()
-                .fillRect(
-                    this.getAttackBox().position.x, 
-                    this.getAttackBox().position.y, 
-                    this.getAttackBox().width, 
-                    this.getAttackBox().height
-                );
-        }
-    };
-
     public update = (): void => {
         this.draw();
+
+        this.animateFrames();
         
         this.setPosition({
             ...this.getPosition(),
             x: this.getPosition().x + this.getVelocity().x,
             y: this.getPosition().y + this.getVelocity().y,
+        });
+        this.setAttackBox({
+            width: this.attackBoxWidth,
+            height: this.attackBoxHeight,
+            position: {
+                ...this.getPosition(),
+                x: this.getDirerectionFaced() === Direction.Right 
+                    ? this.getPosition().x 
+                    : this.getPosition().x + this.width - this.attackBoxWidth,
+            },
         });
 
         if (this.getPosition().y + this.height + this.getVelocity().y >= 

@@ -7,6 +7,7 @@ export interface SpriteProps {
     scale?: number;
     totalFrames?: number;
     heldFrames?: number;
+    offset?: Coords;
 };
 
 export class Sprite extends Base {
@@ -18,7 +19,7 @@ export class Sprite extends Base {
 
     public getPosition = (): Coords => this.position;
 
-    private setPosition = (position: Coords): void => {
+    protected setPosition = (position: Coords): void => {
         this.position = position;
     };
 
@@ -71,15 +72,30 @@ export class Sprite extends Base {
     private setHeldFrames = (heldFrames: number): void => {
         this.heldFrames = heldFrames;
     };
+
+    private offset: Coords;
+
+    public getOffset = (): Coords => this.offset;
+
+    private setOffset = (offset: Coords): void => {
+        this.offset = offset;
+    };
     
-    constructor({ position, imageSrc, scale = 1, totalFrames = 1, heldFrames = 5 }: SpriteProps) {
+    constructor({ 
+        position, 
+        imageSrc, 
+        scale = 1, 
+        totalFrames = 1, 
+        heldFrames = 5,
+        offset = { x: 0, y: 0 },
+    }: SpriteProps) {
         super();
         this.setPosition(position);
         this.setImage(imageSrc);
         this.setScale(scale);
         this.setTotalFrames(totalFrames);
         this.setHeldFrames(heldFrames);
-        this.bindListeners();
+        this.setOffset(offset);
         console.log('Sprite loaded');
     };
 
@@ -90,16 +106,14 @@ export class Sprite extends Base {
             0,
             this.getImage().width / this.getTotalFrames(),
             this.getImage().height,
-            this.getPosition().x,
-            this.getPosition().y,
+            this.getPosition().x - this.getOffset().x,
+            this.getPosition().y - this.getOffset().y,
             this.getImage().width * this.getScale() / this.getTotalFrames(),
             this.getImage().height * this.getScale() ,
         );
     };
 
-    public update = (): void => {
-        this.draw();
-
+    protected animateFrames = (): void => {
         this.setElapsedFrames(this.getElapsedFrames() + 1);
         
         if (this.getElapsedFrames() % this.getHeldFrames() === 0) {
@@ -111,15 +125,8 @@ export class Sprite extends Base {
         }
     };
 
-    private handleUnload = (_event: Event) => {
-        this.destroy();
-    };
-
-    private bindListeners = (): void => {
-        window.addEventListener('unload', this.handleUnload);
-    };
-
-    public destroy = (): void => {
-        window.removeEventListener('unload', this.handleUnload);
+    public update = (): void => {
+        this.draw();
+        this.animateFrames();
     };
 };

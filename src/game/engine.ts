@@ -84,6 +84,10 @@ export class Engine extends Base {
             keyBindings: playerKeyBindings,
             colour: Colour.Green,
             directionFaced: Direction.Right,
+            imageSrc: 'assets/img/samurai-mack/idle.png',
+            totalFrames: 8, // from image
+            scale: 2.5,
+            offset: { x: 215, y: 157 },
         });
         this.setPlayer(player);
         
@@ -93,6 +97,10 @@ export class Engine extends Base {
             keyBindings: enemyKeyBindings,
             colour: Colour.Red,
             directionFaced: Direction.Left,
+            imageSrc: 'assets/img/kenji/idle.png',
+            totalFrames: 4, // from image
+            scale: 2.5,
+            offset: { x: 215, y: 157 },
         });
         this.setEnemy(enemy);
 
