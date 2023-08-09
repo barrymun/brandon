@@ -4,6 +4,7 @@ import { Coords } from "utils";
 export interface SpriteProps {
     position: Coords; 
     imageSrc: string;
+    scale?: number;
 };
 
 export class Sprite extends Base {
@@ -28,11 +29,20 @@ export class Sprite extends Base {
         image.src = imageSrc;
         this.image = image;
     };
+
+    private scale: number;
+
+    public getScale = (): number => this.scale;
+
+    private setScale = (scale: number): void => {
+        this.scale = scale;
+    };
     
-    constructor({ position, imageSrc }: SpriteProps) {
+    constructor({ position, imageSrc, scale = 1 }: SpriteProps) {
         super();
         this.setPosition(position);
         this.setImage(imageSrc);
+        this.setScale(scale);
         this.bindListeners();
         console.log('Sprite loaded');
     };
@@ -42,6 +52,8 @@ export class Sprite extends Base {
             this.getImage(),
             this.getPosition().x,
             this.getPosition().y,
+            this.getImage().width * this.getScale(),
+            this.getImage().height * this.getScale() ,
         );
     };
 

@@ -36,6 +36,14 @@ export class Engine extends Base {
         this.background = background;
     };
     
+    private shop: Sprite;
+
+    public getShop = (): Sprite => this.shop;
+
+    private setShop = (shop: Sprite): void => {
+        this.shop = shop;
+    };
+    
     private player: Fighter;
 
     public getPlayer = (): Fighter => this.player;
@@ -61,6 +69,13 @@ export class Engine extends Base {
             imageSrc: 'assets/img/background.png',
         });
         this.setBackground(background);
+        
+        const shop: Sprite = new Sprite({
+            position: { x: 600, y: 128 },
+            imageSrc: 'assets/img/shop.png',
+            scale: 2.75,
+        });
+        this.setShop(shop);
         
         const player: Fighter = this.createFighter({
             position: { x: 0, y: 0 },
@@ -234,6 +249,7 @@ export class Engine extends Base {
         this.determineDirectionFaced();
         
         this.getBackground().update();
+        this.getShop().update();
         this.getPlayer().update();
         this.getEnemy().update();
 
