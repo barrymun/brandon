@@ -4,6 +4,14 @@ import { Sprite } from "game/sprite";
 import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
 export class Engine extends Base {
+    private animationRequestId: number;
+
+    private getAnimationRequestId = (): number => this.animationRequestId;
+
+    private setAnimationRequestId = (animationRequestId: number): void => {
+        this.animationRequestId = animationRequestId;
+    };
+
     private timer: number = defaultTimer;
 
     public getTimer = (): number => this.timer;
@@ -196,15 +204,25 @@ export class Engine extends Base {
     };
 
     private endGame = (): void => {
-        this.gameOverDialog.close(); // ensure closed before re-opening otherwise error will be thrown
-        this.gameOverDialog.showModal();
-        clearTimeout(this.getGameTimeout());
+        if (this.getAnimationRequestId()) {
+            cancelAnimationFrame(this.getAnimationRequestId());
+        }
+        
+        if (this.getGameTimeout()) {
+            clearTimeout(this.getGameTimeout());
+        }
+        
         this.getPlayer().destroy();
         this.getEnemy().destroy();
+
+        // ensure closed before re-opening otherwise error will be thrown
+        this.gameOverDialog.close();
+        this.gameOverDialog.showModal();
     };
 
     public run = (): void => {
-        requestAnimationFrame(this.run);
+        const animationRequestId = requestAnimationFrame(this.run);
+        this.setAnimationRequestId(animationRequestId);
 
         this.getContext().fillStyle = Colour.Black;
         this.getContext().fillRect(0, 0, this.canvas.width, this.canvas.height);
