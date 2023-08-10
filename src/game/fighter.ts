@@ -6,6 +6,7 @@ import {
     Direction, 
     DirectionFaced, 
     KeyBindings, 
+    SpriteAnimation, 
     defaultAttackDamage, 
     defaultHealth,
     groundOffset, 
@@ -141,9 +142,56 @@ export class Fighter extends Sprite {
         console.log('Fighter loaded');
     };
 
-    public isJumping = (): boolean => this.getVelocity().y < 0;
+    private isJumping = (): boolean => this.getVelocity().y < 0;
     
-    public isFalling = (): boolean => this.getVelocity().y > 0;
+    private isFalling = (): boolean => this.getVelocity().y > 0;
+
+    private switchSpriteState = (state: SpriteAnimation): void => {
+        if (this.getImage().src === this.getSprites().attack.image.src
+            && this.getCurrentFrame() < this.getSprites().attack.totalFrames - 1) {
+            return;
+        }
+
+        switch (state) {
+            case 'attack':
+                if (this.getImage().src !== this.getSprites().attack.image.src) {
+                    this.setImage(this.getSprites().attack.image.src);
+                    this.setTotalFrames(this.getSprites().attack.totalFrames);
+                    this.setCurrentFrame(0);
+                }
+                break;
+            case 'fall':
+                if (this.getImage().src !== this.getSprites().fall.image.src) {
+                    this.setImage(this.getSprites().fall.image.src);
+                    this.setTotalFrames(this.getSprites().fall.totalFrames);
+                    this.setCurrentFrame(0);
+                }
+                break;
+            case 'idle':
+                if (this.getImage().src !== this.getSprites().idle.image.src) {
+                    this.setImage(this.getSprites().idle.image.src);
+                    this.setTotalFrames(this.getSprites().idle.totalFrames);
+                    // not resetting current frame here because it's not necessary
+                }
+                break;
+            case 'jump':
+                if (this.getImage().src !== this.getSprites().jump.image.src) {
+                    this.setImage(this.getSprites().jump.image.src);
+                    this.setTotalFrames(this.getSprites().jump.totalFrames);
+                    this.setCurrentFrame(0);
+                }
+                break;
+            case 'run':
+                if (this.getImage().src !== this.getSprites().run.image.src) {
+                    this.setImage(this.getSprites().run.image.src);
+                    this.setTotalFrames(this.getSprites().run.totalFrames);
+                    // not resetting current frame here because it's not necessary
+                }
+                break;
+            default:
+                break;
+        }
+    };
 
     public update = (): void => {
         this.draw();
@@ -166,8 +214,9 @@ export class Fighter extends Sprite {
             },
         });
 
-        if (this.getPosition().y + this.height + this.getVelocity().y >= 
-            this.canvas.height - groundOffset) {
+        // handle gravity
+        if (this.getPosition().y + this.height + this.getVelocity().y 
+            >= this.canvas.height - groundOffset) {
             this.setVelocity({ ...this.getVelocity(), y: 0 });
         } else {
             this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });
@@ -177,31 +226,23 @@ export class Fighter extends Sprite {
         this.setVelocity({ ...this.getVelocity(), x: 0 });
 
         if (this.isJumping()) {
-            this.setImage(this.getSprites().jump.image.src);
-            this.setTotalFrames(this.getSprites().jump.totalFrames);
-            this.setCurrentFrame(0);
+            this.switchSpriteState('jump');
         } else if (this.isFalling()) {
-            this.setImage(this.getSprites().fall.image.src);
-            this.setTotalFrames(this.getSprites().fall.totalFrames);
-            this.setCurrentFrame(0);
+            this.switchSpriteState('fall');
         } else {
-            // idle
-            this.setImage(this.getSprites().idle.image.src);
-            this.setTotalFrames(this.getSprites().idle.totalFrames);
+            this.switchSpriteState('idle');
         }
         
         if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
             if (!this.isJumping() && !this.isFalling()) {
-                this.setImage(this.getSprites().run.image.src);
-                this.setTotalFrames(this.getSprites().run.totalFrames);
+                this.switchSpriteState('run');
             }
         }
         if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
             if (!this.isJumping() && !this.isFalling()) {
-                this.setImage(this.getSprites().run.image.src); // TODO: need to flip image
-                this.setTotalFrames(this.getSprites().run.totalFrames);
+                this.switchSpriteState('run');
             }
         }
         if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
@@ -212,9 +253,7 @@ export class Fighter extends Sprite {
     private attack(): void {
         this.setIsAttacking(true);
         
-        this.setImage(this.getSprites().attack.image.src);
-        this.setTotalFrames(this.getSprites().attack.totalFrames);
-        this.setCurrentFrame(0);
+        this.switchSpriteState('attack');
         
         setTimeout(() => {
             this.setIsAttacking(false);

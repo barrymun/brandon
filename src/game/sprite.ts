@@ -1,5 +1,5 @@
 import { Base } from "game/base";
-import { Coords } from "utils";
+import { Coords, SpriteAnimation } from "utils";
 
 interface BaseSpriteProps {
     position: Coords; 
@@ -8,8 +8,6 @@ interface BaseSpriteProps {
     heldFrames?: number;
     offset?: Coords;
 };
-
-type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'fall' | 'run';
 
 type Sprites = {
     [key in SpriteAnimation]: {
