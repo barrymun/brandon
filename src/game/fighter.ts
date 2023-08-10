@@ -172,14 +172,17 @@ export class Fighter extends Sprite {
         // unset velocity (handle no keys pressed)
         this.setVelocity({ ...this.getVelocity(), x: 0 });
         this.setImage(this.getSprites().idle.image.src);
+        this.setTotalFrames(this.getSprites().idle.totalFrames);
         
         if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
             this.setImage(this.getSprites().run.image.src);
+            this.setTotalFrames(this.getSprites().run.totalFrames);
         }
         if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
             this.setImage(this.getSprites().run.image.src); // TODO: need to flip image
+            this.setTotalFrames(this.getSprites().run.totalFrames);
         }
         if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
             this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });

@@ -3,8 +3,8 @@ import { Coords } from "utils";
 
 interface BaseSpriteProps {
     position: Coords; 
-    scale?: number;
     totalFrames?: number;
+    scale?: number;
     heldFrames?: number;
     offset?: Coords;
 };
@@ -73,7 +73,7 @@ export class Sprite extends Base {
 
     public getTotalFrames = (): number => this.totalFrames;
 
-    private setTotalFrames = (totalFrames: number): void => {
+    protected setTotalFrames = (totalFrames: number): void => {
         this.totalFrames = totalFrames;
     };
 
@@ -123,6 +123,7 @@ export class Sprite extends Base {
         if (imageSrc) {
             console.log(imageSrc)
             this.setImage(imageSrc);
+            this.setTotalFrames(totalFrames);
         } else {
             this.setSprites(
                 Object.keys(sprites).reduce((previous, key: SpriteAnimation) => {
@@ -138,10 +139,10 @@ export class Sprite extends Base {
                   }, {} as ImageSprites)
             );
             this.setImage(this.getSprites().idle.image.src);
+            this.setTotalFrames(this.getSprites().idle.totalFrames);
             console.log(this.getSprites());
         }
         this.setScale(scale);
-        this.setTotalFrames(totalFrames);
         this.setHeldFrames(heldFrames);
         this.setOffset(offset);
         console.log('Sprite loaded');

@@ -102,7 +102,6 @@ export class Engine extends Base {
                     totalFrames: 8,
                 },
             },
-            totalFrames: 8, // from image
             scale: 2.5,
             offset: { x: 215, y: 157 },
         });
@@ -132,7 +131,6 @@ export class Engine extends Base {
                     totalFrames: 8,
                 },
             },
-            totalFrames: 4, // from image
             scale: 2.5,
             offset: { x: 215, y: 157 },
         });
