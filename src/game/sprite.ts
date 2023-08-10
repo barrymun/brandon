@@ -1,14 +1,34 @@
 import { Base } from "game/base";
 import { Coords } from "utils";
 
-export interface SpriteProps {
+interface BaseSpriteProps {
     position: Coords; 
-    imageSrc: string;
     scale?: number;
     totalFrames?: number;
     heldFrames?: number;
     offset?: Coords;
 };
+
+type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'run';
+
+type Sprites = {
+    [key in SpriteAnimation]: {
+        imageSrc: string;
+        totalFrames: number;
+    };
+};
+
+type ImageSprites = {
+    [key in SpriteAnimation]: {
+        image: HTMLImageElement;
+        totalFrames: number;
+    };
+};
+
+export type SpriteProps =
+    | { imageSrc: string; sprites?: never; } & BaseSpriteProps
+    | { sprites: Sprites; imageSrc?: never; } & BaseSpriteProps
+;
 
 export class Sprite extends Base {
     public readonly width: number = 50;
@@ -27,10 +47,18 @@ export class Sprite extends Base {
 
     public getImage = (): HTMLImageElement => this.image;
 
-    private setImage = (imageSrc: string): void => {
+    protected setImage = (imageSrc: string): void => {
         const image = new Image();
         image.src = imageSrc;
         this.image = image;
+    };
+
+    private sprites: ImageSprites | undefined;
+
+    public getSprites = (): ImageSprites => this.sprites;
+
+    protected setSprites = (sprites: ImageSprites): void => {
+        this.sprites = sprites;
     };
 
     private scale: number;
@@ -83,7 +111,8 @@ export class Sprite extends Base {
     
     constructor({ 
         position, 
-        imageSrc, 
+        imageSrc,
+        sprites,
         scale = 1, 
         totalFrames = 1, 
         heldFrames = 5,
@@ -91,7 +120,26 @@ export class Sprite extends Base {
     }: SpriteProps) {
         super();
         this.setPosition(position);
-        this.setImage(imageSrc);
+        if (imageSrc) {
+            console.log(imageSrc)
+            this.setImage(imageSrc);
+        } else {
+            this.setSprites(
+                Object.keys(sprites).reduce((previous, key: SpriteAnimation) => {
+                    const image = new Image();
+                    image.src = sprites[key].imageSrc;
+                    return {
+                      ...previous,
+                      [key]: {
+                        totalFrames: sprites[key].totalFrames,
+                        image: image,
+                      }
+                    };
+                  }, {} as ImageSprites)
+            );
+            this.setImage(this.getSprites().idle.image.src);
+            console.log(this.getSprites());
+        }
         this.setScale(scale);
         this.setTotalFrames(totalFrames);
         this.setHeldFrames(heldFrames);

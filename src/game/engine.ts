@@ -84,7 +84,24 @@ export class Engine extends Base {
             keyBindings: playerKeyBindings,
             colour: Colour.Green,
             directionFaced: Direction.Right,
-            imageSrc: 'assets/img/samurai-mack/idle.png',
+            sprites: {
+                idle: {
+                    imageSrc: 'assets/img/samurai-mack/idle.png',
+                    totalFrames: 8,
+                },
+                attack: {
+                    imageSrc: 'assets/img/samurai-mack/attack-1.png',
+                    totalFrames: 6,
+                },
+                jump: {
+                    imageSrc: 'assets/img/samurai-mack/jump.png',
+                    totalFrames: 2,
+                },
+                run: {
+                    imageSrc: 'assets/img/samurai-mack/run.png',
+                    totalFrames: 8,
+                },
+            },
             totalFrames: 8, // from image
             scale: 2.5,
             offset: { x: 215, y: 157 },
@@ -97,7 +114,24 @@ export class Engine extends Base {
             keyBindings: enemyKeyBindings,
             colour: Colour.Red,
             directionFaced: Direction.Left,
-            imageSrc: 'assets/img/kenji/idle.png',
+            sprites: {
+                idle: {
+                    imageSrc: 'assets/img/kenji/idle.png',
+                    totalFrames: 4,
+                },
+                attack: {
+                    imageSrc: 'assets/img/kenji/attack-1.png',
+                    totalFrames: 4,
+                },
+                jump: {
+                    imageSrc: 'assets/img/kenji/jump.png',
+                    totalFrames: 2,
+                },
+                run: {
+                    imageSrc: 'assets/img/kenji/run.png',
+                    totalFrames: 8,
+                },
+            },
             totalFrames: 4, // from image
             scale: 2.5,
             offset: { x: 215, y: 157 },
