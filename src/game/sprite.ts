@@ -81,7 +81,7 @@ export class Sprite extends Base {
 
     public getCurrentFrame = (): number => this.currentFrame;
 
-    private setCurrentFrame = (currentFrame: number): void => {
+    protected setCurrentFrame = (currentFrame: number): void => {
         this.currentFrame = currentFrame;
     };
 
@@ -115,7 +115,7 @@ export class Sprite extends Base {
         sprites,
         scale = 1, 
         totalFrames = 1, 
-        heldFrames = 5,
+        heldFrames = 10,
         offset = { x: 0, y: 0 },
     }: SpriteProps) {
         super();

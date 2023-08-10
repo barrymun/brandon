@@ -39,11 +39,11 @@ export class Fighter extends Sprite {
     
     public readonly attackBoxHeight: number = 50;
     
-    public readonly gravity: number = 0.7;
+    public readonly gravity: number = 0.6;
 
     public readonly moveSpeed: number = 5;
 
-    public readonly jumpHeight: number = 20;
+    public readonly jumpHeight: number = 15;
 
     private keyBindings: KeyBindings;
 
@@ -141,6 +141,8 @@ export class Fighter extends Sprite {
         console.log('Fighter loaded');
     };
 
+    public isJumping = (): boolean => this.getVelocity().y < 0;
+
     public update = (): void => {
         this.draw();
 
@@ -171,18 +173,31 @@ export class Fighter extends Sprite {
 
         // unset velocity (handle no keys pressed)
         this.setVelocity({ ...this.getVelocity(), x: 0 });
-        this.setImage(this.getSprites().idle.image.src);
-        this.setTotalFrames(this.getSprites().idle.totalFrames);
+
+        if (this.isJumping()) {
+            // juming/falling
+            this.setImage(this.getSprites().jump.image.src);
+            this.setTotalFrames(this.getSprites().jump.totalFrames);
+            this.setCurrentFrame(0);
+        } else {
+            // idle
+            this.setImage(this.getSprites().idle.image.src);
+            this.setTotalFrames(this.getSprites().idle.totalFrames);
+        }
         
         if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
-            this.setImage(this.getSprites().run.image.src);
-            this.setTotalFrames(this.getSprites().run.totalFrames);
+            if (!this.isJumping()) {
+                this.setImage(this.getSprites().run.image.src);
+                this.setTotalFrames(this.getSprites().run.totalFrames);
+            }
         }
         if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
             this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
-            this.setImage(this.getSprites().run.image.src); // TODO: need to flip image
-            this.setTotalFrames(this.getSprites().run.totalFrames);
+            if (!this.isJumping()) {
+                this.setImage(this.getSprites().run.image.src); // TODO: need to flip image
+                this.setTotalFrames(this.getSprites().run.totalFrames);
+            }
         }
         if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
             this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
@@ -191,6 +206,11 @@ export class Fighter extends Sprite {
 
     private attack(): void {
         this.setIsAttacking(true);
+        
+        this.setImage(this.getSprites().attack.image.src);
+        this.setTotalFrames(this.getSprites().attack.totalFrames);
+        this.setCurrentFrame(0);
+        
         setTimeout(() => {
             this.setIsAttacking(false);
         }, 100);
