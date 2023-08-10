@@ -132,7 +132,7 @@ export class Engine extends Base {
                 },
             },
             scale: 2.5,
-            offset: { x: 215, y: 157 },
+            offset: { x: 215, y: 172 },
         });
         this.setEnemy(enemy);
 
