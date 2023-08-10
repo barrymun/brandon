@@ -9,7 +9,7 @@ interface BaseSpriteProps {
     offset?: Coords;
 };
 
-type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'run';
+type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'fall' | 'run';
 
 type Sprites = {
     [key in SpriteAnimation]: {

@@ -97,6 +97,10 @@ export class Engine extends Base {
                     imageSrc: 'assets/img/samurai-mack/jump.png',
                     totalFrames: 2,
                 },
+                fall: {
+                    imageSrc: 'assets/img/samurai-mack/fall.png',
+                    totalFrames: 2,
+                },
                 run: {
                     imageSrc: 'assets/img/samurai-mack/run.png',
                     totalFrames: 8,
@@ -124,6 +128,10 @@ export class Engine extends Base {
                 },
                 jump: {
                     imageSrc: 'assets/img/kenji/jump.png',
+                    totalFrames: 2,
+                },
+                fall: {
+                    imageSrc: 'assets/img/kenji/fall.png',
                     totalFrames: 2,
                 },
                 run: {
