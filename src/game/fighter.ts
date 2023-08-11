@@ -15,7 +15,6 @@ import {
 export type FighterProps = {
     velocity: Coords; 
     keyBindings: KeyBindings;
-    colour: Colour;
     directionFaced: DirectionFaced;
 } & SpriteProps;
 
@@ -92,14 +91,6 @@ export class Fighter extends Sprite {
         this.velocity = velocity;
     };
 
-    private colour: Colour;
-
-    public getColour = (): Colour => this.colour;
-
-    private setColour = (colour: Colour): void => {
-        this.colour = colour;
-    };
-
     private isAttacking: boolean = false;
 
     public getIsAttacking = (): boolean => this.isAttacking;
@@ -132,11 +123,10 @@ export class Fighter extends Sprite {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ velocity, keyBindings, colour, directionFaced, ...spriteProps }: FighterProps) {
+    constructor({ velocity, keyBindings, directionFaced, ...spriteProps }: FighterProps) {
         super(spriteProps);
         this.setVelocity(velocity);
         this.setKeyBindings(keyBindings);
-        this.setColour(colour);
         this.setDirectionFaced(directionFaced);
         this.bindListeners();
         console.log('Fighter loaded');

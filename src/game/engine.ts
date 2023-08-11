@@ -82,7 +82,6 @@ export class Engine extends Base {
             position: { x: 0, y: 0 },
             velocity: { x: 0, y: 0 },
             keyBindings: playerKeyBindings,
-            colour: Colour.Green,
             directionFaced: Direction.Right,
             sprites: {
                 idle: {
@@ -115,7 +114,6 @@ export class Engine extends Base {
             position: { x: 400, y: 100 },
             velocity: { x: 0, y: 0 },
             keyBindings: enemyKeyBindings,
-            colour: Colour.Red,
             directionFaced: Direction.Left,
             sprites: {
                 idle: {
