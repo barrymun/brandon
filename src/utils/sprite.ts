@@ -9,7 +9,8 @@ export interface AttackBox {
     position: Coords;
 };
 
-export interface AttackBoxOffset {
+export interface AttackBoxDimensions {
+    offset: Coords;
     width: number;
     height: number;
 }

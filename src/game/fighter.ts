@@ -1,7 +1,7 @@
 import { Sprite, SpriteProps } from "game/sprite";
 import { 
     AttackBox, 
-    AttackBoxOffset, 
+    AttackBoxDimensions, 
     Colour, 
     Coords, 
     Direction, 
@@ -17,7 +17,7 @@ export type FighterProps = {
     velocity: Coords; 
     keyBindings: KeyBindings;
     directionFaced: DirectionFaced;
-    attackBoxOffset: AttackBoxOffset;
+    attackBoxDimensions: AttackBoxDimensions;
 } & SpriteProps;
 
 export interface Keys {
@@ -33,7 +33,7 @@ export interface Keys {
 }
 
 export class Fighter extends Sprite {
-    public readonly width: number = 50;
+    public readonly width: number = 100;
     
     public readonly height: number = 150;
     
@@ -83,15 +83,16 @@ export class Fighter extends Sprite {
         this.attackBox = attackBox;
     };
 
-    private attackBoxOffset: AttackBoxOffset = {
+    private attackBoxDimensions: AttackBoxDimensions = {
+        offset: { x: 0, y: 0 },
         width: this.attackBoxWidth,
         height: this.attackBoxHeight,
     };
 
-    public getAttackBoxOffset = (): AttackBoxOffset => this.attackBoxOffset;
+    public getAttackBoxOffset = (): AttackBoxDimensions => this.attackBoxDimensions;
 
-    private setAttackBoxOffset = (attackBoxOffset: AttackBoxOffset): void => {
-        this.attackBoxOffset = attackBoxOffset;
+    private setAttackBoxOffset = (attackBoxDimensions: AttackBoxDimensions): void => {
+        this.attackBoxDimensions = attackBoxDimensions;
     };
     
     private velocity: Coords;
@@ -134,12 +135,12 @@ export class Fighter extends Sprite {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ velocity, keyBindings, directionFaced, attackBoxOffset, ...spriteProps }: FighterProps) {
+    constructor({ velocity, keyBindings, directionFaced, attackBoxDimensions, ...spriteProps }: FighterProps) {
         super(spriteProps);
         this.setVelocity(velocity);
         this.setKeyBindings(keyBindings);
         this.setDirectionFaced(directionFaced);
-        this.setAttackBoxOffset(attackBoxOffset);
+        this.setAttackBoxOffset(attackBoxDimensions);
         this.bindListeners();
         console.log('Fighter loaded');
     };
@@ -209,8 +210,8 @@ export class Fighter extends Sprite {
             position: {
                 ...this.getPosition(),
                 x: this.getDirectionFaced() === Direction.Right 
-                    ? this.getPosition().x 
-                    : this.getPosition().x + this.width - this.getAttackBoxOffset().width,
+                    ? this.getPosition().x + this.getAttackBoxOffset().offset.x
+                    : this.getPosition().x - this.width - this.getAttackBoxOffset().offset.x,
                 y: this.getPosition().y + (this.height / 3),
             },
         });
@@ -259,12 +260,7 @@ export class Fighter extends Sprite {
 
     private attack(): void {
         this.setIsAttacking(true);
-        
         this.switchSpriteState('attack');
-        
-        setTimeout(() => {
-            this.setIsAttacking(false);
-        }, 100);
     };
 
     private handleKeydown = (event: KeyboardEvent) => {

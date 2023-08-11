@@ -83,9 +83,10 @@ export class Engine extends Base {
             velocity: { x: 0, y: 0 },
             keyBindings: playerKeyBindings,
             directionFaced: Direction.Right,
-            attackBoxOffset: {
-                width: 200,
-                height: 50,
+            attackBoxDimensions: {
+                offset: { x: 70, y: 0 },
+                width: 150,
+                height: 80,
             },
             sprites: {
                 idle: {
@@ -119,9 +120,10 @@ export class Engine extends Base {
             velocity: { x: 0, y: 0 },
             keyBindings: enemyKeyBindings,
             directionFaced: Direction.Left,
-            attackBoxOffset: {
-                width: 200,
-                height: 50,
+            attackBoxDimensions: {
+                offset: { x: 50, y: 0 },
+                width: 150,
+                height: 80,
             },
             sprites: {
                 idle: {
@@ -189,6 +191,7 @@ export class Engine extends Base {
             && attacker.getAttackBox().position.y + attacker.getAttackBoxOffset().height >= defender.getPosition().y
             && attacker.getAttackBox().position.y <= defender.getPosition().y + defender.height
             && attacker.getIsAttacking()
+            && attacker.getCurrentFrame() === Math.ceil(attacker.getSprites().attack.totalFrames / 2)
         ) {
             console.log('hit');
             defender.setHealth(defender.getHealth() - attacker.getDamage());
@@ -217,6 +220,24 @@ export class Engine extends Base {
         if (wasAttacked) {
             const damageTaken: number = 100 - this.getPlayer().getHealth();
             Object.assign(this.playerHealth.style, { width: `calc(100% - ${damageTaken}%)` });
+        }
+    };
+
+    private endPlayerAttack = (): void => {
+        if (this.getPlayer().getIsAttacking()
+            && this.getPlayer().getCurrentFrame() === 
+                Math.ceil(this.getPlayer().getSprites().attack.totalFrames / 2)
+        ) {
+            this.getPlayer().setIsAttacking(false);
+        }
+    };
+    
+    private endEnemyAttack = (): void => {
+        if (this.getEnemy().getIsAttacking()
+            && this.getEnemy().getCurrentFrame() === 
+                Math.ceil(this.getEnemy().getSprites().attack.totalFrames / 2)
+        ) {
+            this.getEnemy().setIsAttacking(false);
         }
     };
 
@@ -299,6 +320,8 @@ export class Engine extends Base {
 
         this.detectPlayerAttacking();
         this.detectEnemyAttacking();
+        this.endPlayerAttack();
+        this.endEnemyAttack();
         this.detectPlayerWallCollision();
         this.detectEnemyWallCollision();
         this.determineDirectionFaced();
