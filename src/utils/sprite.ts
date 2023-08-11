@@ -7,9 +7,12 @@ export interface Coords {
 
 export interface AttackBox {
     position: Coords;
+};
+
+export interface AttackBoxOffset {
     width: number;
     height: number;
-};
+}
 
 export type DirectionFaced = Direction.Left | Direction.Right;
 

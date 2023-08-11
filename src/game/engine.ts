@@ -83,6 +83,10 @@ export class Engine extends Base {
             velocity: { x: 0, y: 0 },
             keyBindings: playerKeyBindings,
             directionFaced: Direction.Right,
+            attackBoxOffset: {
+                width: 200,
+                height: 50,
+            },
             sprites: {
                 idle: {
                     imageSrc: 'assets/img/samurai-mack/idle.png',
@@ -115,6 +119,10 @@ export class Engine extends Base {
             velocity: { x: 0, y: 0 },
             keyBindings: enemyKeyBindings,
             directionFaced: Direction.Left,
+            attackBoxOffset: {
+                width: 200,
+                height: 50,
+            },
             sprites: {
                 idle: {
                     imageSrc: 'assets/img/kenji/idle.png',
@@ -176,9 +184,9 @@ export class Engine extends Base {
 
     private checkFighterAttacked = ({ attacker, defender }: { attacker: Fighter; defender: Fighter; }): boolean => {
         if (
-            attacker.getAttackBox().position.x + attacker.getAttackBox().width >= defender.getPosition().x
+            attacker.getAttackBox().position.x + attacker.getAttackBoxOffset().width >= defender.getPosition().x
             && attacker.getAttackBox().position.x <= defender.getPosition().x + defender.width
-            && attacker.getAttackBox().position.y + attacker.getAttackBox().height >= defender.getPosition().y
+            && attacker.getAttackBox().position.y + attacker.getAttackBoxOffset().height >= defender.getPosition().y
             && attacker.getAttackBox().position.y <= defender.getPosition().y + defender.height
             && attacker.getIsAttacking()
         ) {

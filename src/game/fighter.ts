@@ -1,6 +1,7 @@
 import { Sprite, SpriteProps } from "game/sprite";
 import { 
     AttackBox, 
+    AttackBoxOffset, 
     Colour, 
     Coords, 
     Direction, 
@@ -16,6 +17,7 @@ export type FighterProps = {
     velocity: Coords; 
     keyBindings: KeyBindings;
     directionFaced: DirectionFaced;
+    attackBoxOffset: AttackBoxOffset;
 } & SpriteProps;
 
 export interface Keys {
@@ -72,8 +74,6 @@ export class Fighter extends Sprite {
     };
 
     private attackBox: AttackBox = {
-        width: this.attackBoxWidth,
-        height: this.attackBoxHeight,
         position: this.getPosition(),
     };
 
@@ -81,6 +81,17 @@ export class Fighter extends Sprite {
 
     private setAttackBox = (attackBox: AttackBox): void => {
         this.attackBox = attackBox;
+    };
+
+    private attackBoxOffset: AttackBoxOffset = {
+        width: this.attackBoxWidth,
+        height: this.attackBoxHeight,
+    };
+
+    public getAttackBoxOffset = (): AttackBoxOffset => this.attackBoxOffset;
+
+    private setAttackBoxOffset = (attackBoxOffset: AttackBoxOffset): void => {
+        this.attackBoxOffset = attackBoxOffset;
     };
     
     private velocity: Coords;
@@ -101,7 +112,7 @@ export class Fighter extends Sprite {
     
     private directionFaced: DirectionFaced;
 
-    public getDirerectionFaced = (): DirectionFaced => this.directionFaced;
+    public getDirectionFaced = (): DirectionFaced => this.directionFaced;
 
     public setDirectionFaced = (directionFaced: DirectionFaced): void => {
         this.directionFaced = directionFaced;
@@ -123,11 +134,12 @@ export class Fighter extends Sprite {
         this.attackDamage = attackDamage;
     };
     
-    constructor({ velocity, keyBindings, directionFaced, ...spriteProps }: FighterProps) {
+    constructor({ velocity, keyBindings, directionFaced, attackBoxOffset, ...spriteProps }: FighterProps) {
         super(spriteProps);
         this.setVelocity(velocity);
         this.setKeyBindings(keyBindings);
         this.setDirectionFaced(directionFaced);
+        this.setAttackBoxOffset(attackBoxOffset);
         this.bindListeners();
         console.log('Fighter loaded');
     };
@@ -194,15 +206,20 @@ export class Fighter extends Sprite {
             y: this.getPosition().y + this.getVelocity().y,
         });
         this.setAttackBox({
-            width: this.attackBoxWidth,
-            height: this.attackBoxHeight,
             position: {
                 ...this.getPosition(),
-                x: this.getDirerectionFaced() === Direction.Right 
+                x: this.getDirectionFaced() === Direction.Right 
                     ? this.getPosition().x 
-                    : this.getPosition().x + this.width - this.attackBoxWidth,
+                    : this.getPosition().x + this.width - this.getAttackBoxOffset().width,
+                y: this.getPosition().y + (this.height / 3),
             },
         });
+        this.getContext().fillRect(
+            this.getAttackBox().position.x,
+            this.getAttackBox().position.y,
+            this.getAttackBoxOffset().width,
+            this.getAttackBoxOffset().height,
+        );
 
         // handle gravity
         if (this.getPosition().y + this.height + this.getVelocity().y 
