@@ -1,3 +1,7 @@
+.interface-cntr {
+    position: relative;
+}
+
 .interface {
     position: absolute;
     width: calc(100% - 32px);

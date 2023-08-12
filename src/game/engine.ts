@@ -3,7 +3,7 @@ import gsap from "gsap";
 import { Base } from "game/base";
 import { Fighter, FighterProps } from "game/fighter";
 import { Sprite } from "game/sprite";
-import { Colour, Direction, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
+import { Colour, Direction, defaultCanvasHeight, defaultCanvasWidth, defaultTimer, enemyKeyBindings, playerKeyBindings } from "utils";
 
 export class Engine extends Base {
     private animationRequestId: number;
@@ -86,7 +86,7 @@ export class Engine extends Base {
         this.setShop(shop);
         
         const player: Fighter = this.createFighter({
-            position: { x: window.innerWidth / 4, y: 0 },
+            position: { x: defaultCanvasWidth / 4, y: 0 },
             velocity: { x: 0, y: 0 },
             keyBindings: playerKeyBindings,
             directionFaced: Direction.Right,
@@ -138,7 +138,7 @@ export class Engine extends Base {
         this.setPlayer(player);
         
         const enemy: Fighter = this.createFighter({
-            position: { x: window.innerWidth / 2, y: 0 },
+            position: { x: (defaultCanvasWidth / 4) * 3, y: 0 },
             velocity: { x: 0, y: 0 },
             keyBindings: enemyKeyBindings,
             directionFaced: Direction.Left,
@@ -205,8 +205,8 @@ export class Engine extends Base {
     private setCanvasSize = (): void => {
         // const width: number = window.innerWidth;
         // const height: number = window.innerHeight;
-        const width: number = 1024;
-        const height: number = 576;
+        const width: number = defaultCanvasWidth;
+        const height: number = defaultCanvasHeight;
         
         this.canvas.width = width;
         this.canvas.height = height;
