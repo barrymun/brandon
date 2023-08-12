@@ -191,6 +191,10 @@ export class Engine extends Base {
     };
 
     private decreaseTimer = (): void => {
+        if (this.getPlayer().isDying() || this.getEnemy().isDying()) {
+            return;
+        }
+        
         this.setGameTimeout(setTimeout(this.decreaseTimer, 1000));
         if (this.getTimer() > 0) {
             this.setTimer(this.getTimer() - 1);
@@ -322,16 +326,28 @@ export class Engine extends Base {
         }
     };
 
+    private stopAnimation = (): void => {
+        if (this.getAnimationRequestId()) {
+            cancelAnimationFrame(this.getAnimationRequestId());
+        }
+    };
+
+    private stopGameTimer = (): void => {
+        if (this.getGameTimeout()) {
+            clearTimeout(this.getGameTimeout());
+        }
+    };
+
     private checkGameOver = (): void => {
         let gameOver: boolean = false;
         
-        if (this.getPlayer().getHealth() <= 0) {
+        if (this.getPlayer().isDying()) {
             this.gameOverTitle.innerHTML = 'Game over, you lose!';
             this.getPlayer().destroy();
             setTimeout(() => {
                 this.endGame();
             }, 3000);
-        } else if (this.getEnemy().getHealth() <= 0) {
+        } else if (this.getEnemy().isDying()) {
             this.gameOverTitle.innerHTML = 'Game over, you win!';
             this.getEnemy().destroy();
             setTimeout(() => {
@@ -350,13 +366,8 @@ export class Engine extends Base {
     };
 
     private endGame = (): void => {
-        if (this.getAnimationRequestId()) {
-            cancelAnimationFrame(this.getAnimationRequestId());
-        }
-        
-        if (this.getGameTimeout()) {
-            clearTimeout(this.getGameTimeout());
-        }
+        this.stopAnimation();
+        this.stopGameTimer();
         
         this.getPlayer().destroy();
         this.getEnemy().destroy();

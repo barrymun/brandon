@@ -157,7 +157,7 @@ export class Fighter extends Sprite {
     
     private isFalling = (): boolean => this.getVelocity().y > 0;
 
-    private isDying = (): boolean => this.getHealth() <= 0;
+    public isDying = (): boolean => this.getHealth() <= 0;
 
     private switchSpriteState = (state: SpriteAnimation): void => {
         // don't switch if dying
