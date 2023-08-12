@@ -1,3 +1,5 @@
+import gsap from "gsap";
+
 import { Base } from "game/base";
 import { Fighter, FighterProps } from "game/fighter";
 import { Sprite } from "game/sprite";
@@ -79,7 +81,7 @@ export class Engine extends Base {
         this.setShop(shop);
         
         const player: Fighter = this.createFighter({
-            position: { x: 0, y: 0 },
+            position: { x: window.innerWidth / 4, y: 0 },
             velocity: { x: 0, y: 0 },
             keyBindings: playerKeyBindings,
             directionFaced: Direction.Right,
@@ -124,7 +126,7 @@ export class Engine extends Base {
         this.setPlayer(player);
         
         const enemy: Fighter = this.createFighter({
-            position: { x: 400, y: 100 },
+            position: { x: window.innerWidth / 2, y: 0 },
             velocity: { x: 0, y: 0 },
             keyBindings: enemyKeyBindings,
             directionFaced: Direction.Left,
@@ -222,8 +224,15 @@ export class Engine extends Base {
             defender: this.getEnemy(),
         });
         if (wasAttacked) {
-            const damageTaken: number = 100 - this.getEnemy().getHealth();
-            Object.assign(this.enemyHealth.style, { width: `calc(100% - ${damageTaken}%)` });
+            gsap.fromTo(
+                this.enemyHealth, 
+                {
+                    width: `${this.getEnemy().getHealth() + this.getPlayer().getDamage()}%`,
+                },
+                {
+                    width: `${this.getEnemy().getHealth()}%`,
+                }
+            );
         }
     };
 
@@ -233,8 +242,15 @@ export class Engine extends Base {
             defender: this.getPlayer(),
         });
         if (wasAttacked) {
-            const damageTaken: number = 100 - this.getPlayer().getHealth();
-            Object.assign(this.playerHealth.style, { width: `calc(100% - ${damageTaken}%)` });
+            gsap.fromTo(
+                this.playerHealth, 
+                {
+                    width: `${this.getPlayer().getHealth() + this.getEnemy().getDamage()}%`,
+                },
+                {
+                    width: `${this.getPlayer().getHealth()}%`,
+                }
+            );
         }
     };
 

@@ -113,7 +113,7 @@ export class Sprite extends Base {
         sprites,
         scale = 1, 
         totalFrames = 1, 
-        heldFrames = 10,
+        heldFrames = 5,
         offset = { x: 0, y: 0 },
     }: SpriteProps) {
         super();

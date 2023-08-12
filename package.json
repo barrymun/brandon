@@ -30,6 +30,7 @@
         "webpack-dev-server": "^4.15.1"
     },
     "dependencies": {
-        "clean-webpack-plugin": "^4.0.0"
+        "clean-webpack-plugin": "^4.0.0",
+        "gsap": "^3.12.2"
     }
 }
