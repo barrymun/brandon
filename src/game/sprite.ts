@@ -7,11 +7,13 @@ interface BaseSpriteProps {
     scale?: number;
     heldFrames?: number;
     offset?: Coords;
+    shouldFlip?: boolean;
 };
 
 type Sprites = {
     [key in SpriteAnimation]: {
         imageSrc: string;
+        flippedImageSrc: string;
         totalFrames: number;
     };
 };
@@ -19,6 +21,7 @@ type Sprites = {
 type ImageSprites = {
     [key in SpriteAnimation]: {
         image: HTMLImageElement;
+        flippedImage: HTMLImageElement;
         totalFrames: number;
     };
 };
@@ -106,6 +109,14 @@ export class Sprite extends Base {
     private setOffset = (offset: Coords): void => {
         this.offset = offset;
     };
+
+    private shouldFlip: boolean = false;
+
+    public getShouldFlip = (): boolean => this.shouldFlip;
+
+    public setShouldFlip = (shouldFlip: boolean): void => {
+        this.shouldFlip = shouldFlip;
+    }
     
     constructor({ 
         position, 
@@ -115,6 +126,7 @@ export class Sprite extends Base {
         totalFrames = 1, 
         heldFrames = 5,
         offset = { x: 0, y: 0 },
+        shouldFlip = false,
     }: SpriteProps) {
         super();
         this.setPosition(position);
@@ -126,21 +138,25 @@ export class Sprite extends Base {
                 Object.keys(sprites).reduce((previous, key: SpriteAnimation) => {
                     const image = new Image();
                     image.src = sprites[key].imageSrc;
+                    const flippedImage = new Image();
+                    flippedImage.src = sprites[key].flippedImageSrc;
                     return {
                       ...previous,
                       [key]: {
                         totalFrames: sprites[key].totalFrames,
-                        image: image,
+                        image,
+                        flippedImage,
                       }
                     };
                   }, {} as ImageSprites)
             );
-            this.setImage(this.getSprites().idle.image.src);
+            this.setImage(this.getSprites().idle[shouldFlip ? 'flippedImage' : 'image'].src);
             this.setTotalFrames(this.getSprites().idle.totalFrames);
         }
         this.setScale(scale);
         this.setHeldFrames(heldFrames);
         this.setOffset(offset);
+        this.setShouldFlip(shouldFlip);
         console.log('Sprite loaded');
     };
 

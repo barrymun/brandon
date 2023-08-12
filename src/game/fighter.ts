@@ -161,7 +161,7 @@ export class Fighter extends Sprite {
 
     private switchSpriteState = (state: SpriteAnimation): void => {
         // don't switch if dying
-        if (this.getImage().src === this.getSprites().die.image.src) {
+        if (this.getImage().src === this.getSprites().die[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
             if (this.getCurrentFrame() === this.getSprites().die.totalFrames - 1) {
                 this.setIsDead(true);
             }
@@ -169,63 +169,63 @@ export class Fighter extends Sprite {
         }
         
         // don't switch if attack animation is still playing
-        if (this.getImage().src === this.getSprites().attack.image.src
+        if (this.getImage().src === this.getSprites().attack[this.getShouldFlip() ? 'flippedImage' : 'image'].src
             && this.getCurrentFrame() < this.getSprites().attack.totalFrames - 1) {
             return;
         }
 
         // don't switch if take hit animation is still playing
-        if (this.getImage().src === this.getSprites().takeHit.image.src
+        if (this.getImage().src === this.getSprites().takeHit[this.getShouldFlip() ? 'flippedImage' : 'image'].src
             && this.getCurrentFrame() < this.getSprites().takeHit.totalFrames - 1) {
             return;
         }
 
         switch (state) {
             case 'idle':
-                if (this.getImage().src !== this.getSprites().idle.image.src) {
-                    this.setImage(this.getSprites().idle.image.src);
+                if (this.getImage().src !== this.getSprites().idle[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().idle[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().idle.totalFrames);
                     // not resetting current frame here because it's not necessary
                 }
                 break;
             case 'run':
-                if (this.getImage().src !== this.getSprites().run.image.src) {
-                    this.setImage(this.getSprites().run.image.src);
+                if (this.getImage().src !== this.getSprites().run[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().run[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().run.totalFrames);
                     // not resetting current frame here because it's not necessary
                 }
                 break;
             case 'attack':
-                if (this.getImage().src !== this.getSprites().attack.image.src) {
-                    this.setImage(this.getSprites().attack.image.src);
+                if (this.getImage().src !== this.getSprites().attack[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().attack[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().attack.totalFrames);
                     this.setCurrentFrame(0);
                 }
                 break;
             case 'fall':
-                if (this.getImage().src !== this.getSprites().fall.image.src) {
-                    this.setImage(this.getSprites().fall.image.src);
+                if (this.getImage().src !== this.getSprites().fall[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().fall[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().fall.totalFrames);
                     this.setCurrentFrame(0);
                 }
                 break;
             case 'jump':
-                if (this.getImage().src !== this.getSprites().jump.image.src) {
-                    this.setImage(this.getSprites().jump.image.src);
+                if (this.getImage().src !== this.getSprites().jump[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().jump[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().jump.totalFrames);
                     this.setCurrentFrame(0);
                 }
                 break;
             case 'takeHit':
-                if (this.getImage().src !== this.getSprites().takeHit.image.src) {
-                    this.setImage(this.getSprites().takeHit.image.src);
+                if (this.getImage().src !== this.getSprites().takeHit[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().takeHit[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().takeHit.totalFrames);
                     this.setCurrentFrame(0);
                 }
                 break;
             case 'die':
-                if (this.getImage().src !== this.getSprites().die.image.src) {
-                    this.setImage(this.getSprites().die.image.src);
+                if (this.getImage().src !== this.getSprites().die[this.getShouldFlip() ? 'flippedImage' : 'image'].src) {
+                    this.setImage(this.getSprites().die[this.getShouldFlip() ? 'flippedImage' : 'image'].src);
                     this.setTotalFrames(this.getSprites().die.totalFrames);
                     this.setCurrentFrame(0);
                 }

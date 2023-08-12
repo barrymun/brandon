@@ -93,30 +93,37 @@ export class Engine extends Base {
             sprites: {
                 idle: {
                     imageSrc: 'assets/img/samurai-mack/idle.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/idle-flipped.png',
                     totalFrames: 8,
                 },
                 attack: {
                     imageSrc: 'assets/img/samurai-mack/attack-1.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/attack-1-flipped.png',
                     totalFrames: 6,
                 },
                 jump: {
                     imageSrc: 'assets/img/samurai-mack/jump.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/jump-flipped.png',
                     totalFrames: 2,
                 },
                 fall: {
                     imageSrc: 'assets/img/samurai-mack/fall.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/fall-flipped.png',
                     totalFrames: 2,
                 },
                 run: {
                     imageSrc: 'assets/img/samurai-mack/run.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/run-flipped.png',
                     totalFrames: 8,
                 },
                 takeHit: {
                     imageSrc: 'assets/img/samurai-mack/take-hit-white-silhouette.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/take-hit-white-silhouette-flipped.png',
                     totalFrames: 4,
                 },
                 die: {
                     imageSrc: 'assets/img/samurai-mack/death.png',
+                    flippedImageSrc: 'assets/img/samurai-mack/death-flipped.png',
                     totalFrames: 6,
                 },
             },
@@ -138,30 +145,37 @@ export class Engine extends Base {
             sprites: {
                 idle: {
                     imageSrc: 'assets/img/kenji/idle.png',
+                    flippedImageSrc: 'assets/img/kenji/idle-flipped.png',
                     totalFrames: 4,
                 },
                 attack: {
                     imageSrc: 'assets/img/kenji/attack-1.png',
+                    flippedImageSrc: 'assets/img/kenji/attack-1-flipped.png',
                     totalFrames: 4,
                 },
                 jump: {
                     imageSrc: 'assets/img/kenji/jump.png',
+                    flippedImageSrc: 'assets/img/kenji/jump-flipped.png',
                     totalFrames: 2,
                 },
                 fall: {
                     imageSrc: 'assets/img/kenji/fall.png',
+                    flippedImageSrc: 'assets/img/kenji/fall-flipped.png',
                     totalFrames: 2,
                 },
                 run: {
                     imageSrc: 'assets/img/kenji/run.png',
+                    flippedImageSrc: 'assets/img/kenji/run-flipped.png',
                     totalFrames: 8,
                 },
                 takeHit: {
                     imageSrc: 'assets/img/kenji/take-hit.png',
+                    flippedImageSrc: 'assets/img/kenji/take-hit-flipped.png',
                     totalFrames: 3,
                 },
                 die: {
                     imageSrc: 'assets/img/kenji/death.png',
+                    flippedImageSrc: 'assets/img/kenji/death-flipped.png',
                     totalFrames: 7,
                 },
             },
@@ -185,10 +199,10 @@ export class Engine extends Base {
     };
 
     private setCanvasSize = (): void => {
-        // const width: number = window.innerWidth;
-        // const height: number = window.innerHeight;
-        const width: number = 1024;
-        const height: number = 576;
+        const width: number = window.innerWidth;
+        const height: number = window.innerHeight;
+        // const width: number = 1024;
+        // const height: number = 576;
         
         this.canvas.width = width;
         this.canvas.height = height;
@@ -297,10 +311,14 @@ export class Engine extends Base {
     private determineDirectionFaced = (): void => {
         if (this.getPlayer().getPosition().x < this.getEnemy().getPosition().x) {
             this.getPlayer().setDirectionFaced(Direction.Right);
+            this.getPlayer().setShouldFlip(false);
             this.getEnemy().setDirectionFaced(Direction.Left);
+            this.getEnemy().setShouldFlip(false);
         } else {
             this.getPlayer().setDirectionFaced(Direction.Left);
+            this.getPlayer().setShouldFlip(true);
             this.getEnemy().setDirectionFaced(Direction.Right);
+            this.getEnemy().setShouldFlip(true);
         }
     };
 
