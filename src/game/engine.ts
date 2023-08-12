@@ -61,11 +61,16 @@ export class Engine extends Base {
     private setEnemy = (enemy: Fighter): void => {
         this.enemy = enemy;
     };
-    
+
     constructor() {
         super();
         this.setCanvasSize();
+        this.decreaseTimer();
+        this.bindListeners();
+        console.log('Engine loaded');
+    };
 
+    private draw = (): void => {
         const background: Sprite = new Sprite({
             position: { x: 0, y: 0 },
             imageSrc: 'assets/img/background.png',
@@ -183,11 +188,6 @@ export class Engine extends Base {
             offset: { x: 215, y: 172 },
         });
         this.setEnemy(enemy);
-
-        this.decreaseTimer();
-        
-        this.bindListeners();
-        console.log('Engine loaded');
     };
 
     private decreaseTimer = (): void => {
@@ -203,15 +203,17 @@ export class Engine extends Base {
     };
 
     private setCanvasSize = (): void => {
-        const width: number = window.innerWidth;
-        const height: number = window.innerHeight;
-        // const width: number = 1024;
-        // const height: number = 576;
+        // const width: number = window.innerWidth;
+        // const height: number = window.innerHeight;
+        const width: number = 1024;
+        const height: number = 576;
         
         this.canvas.width = width;
         this.canvas.height = height;
 
+        this.getContext().clearRect(0, 0, width, height);
         this.getContext().fillRect(0, 0, width, height);
+        this.draw();
     }
 
     private createFighter = (props: FighterProps): Fighter => {
