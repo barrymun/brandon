@@ -134,6 +134,14 @@ export class Fighter extends Sprite {
     public setDamage = (attackDamage: number): void => {
         this.attackDamage = attackDamage;
     };
+
+    private isDead: boolean = false;
+
+    public getIsDead = (): boolean => this.isDead;
+
+    private setIsDead = (isDead: boolean): void => {
+        this.isDead = isDead;
+    };
     
     constructor({ velocity, keyBindings, directionFaced, attackBoxDimensions, ...spriteProps }: FighterProps) {
         super(spriteProps);
@@ -150,6 +158,14 @@ export class Fighter extends Sprite {
     private isFalling = (): boolean => this.getVelocity().y > 0;
 
     private switchSpriteState = (state: SpriteAnimation): void => {
+        // don't switch if dying
+        if (this.getImage().src === this.getSprites().die.image.src) {
+            if (this.getCurrentFrame() === this.getSprites().die.totalFrames - 1) {
+                this.setIsDead(true);
+            }
+            return;
+        }
+        
         // don't switch if attack animation is still playing
         if (this.getImage().src === this.getSprites().attack.image.src
             && this.getCurrentFrame() < this.getSprites().attack.totalFrames - 1) {
@@ -163,6 +179,20 @@ export class Fighter extends Sprite {
         }
 
         switch (state) {
+            case 'idle':
+                if (this.getImage().src !== this.getSprites().idle.image.src) {
+                    this.setImage(this.getSprites().idle.image.src);
+                    this.setTotalFrames(this.getSprites().idle.totalFrames);
+                    // not resetting current frame here because it's not necessary
+                }
+                break;
+            case 'run':
+                if (this.getImage().src !== this.getSprites().run.image.src) {
+                    this.setImage(this.getSprites().run.image.src);
+                    this.setTotalFrames(this.getSprites().run.totalFrames);
+                    // not resetting current frame here because it's not necessary
+                }
+                break;
             case 'attack':
                 if (this.getImage().src !== this.getSprites().attack.image.src) {
                     this.setImage(this.getSprites().attack.image.src);
@@ -177,25 +207,11 @@ export class Fighter extends Sprite {
                     this.setCurrentFrame(0);
                 }
                 break;
-            case 'idle':
-                if (this.getImage().src !== this.getSprites().idle.image.src) {
-                    this.setImage(this.getSprites().idle.image.src);
-                    this.setTotalFrames(this.getSprites().idle.totalFrames);
-                    // not resetting current frame here because it's not necessary
-                }
-                break;
             case 'jump':
                 if (this.getImage().src !== this.getSprites().jump.image.src) {
                     this.setImage(this.getSprites().jump.image.src);
                     this.setTotalFrames(this.getSprites().jump.totalFrames);
                     this.setCurrentFrame(0);
-                }
-                break;
-            case 'run':
-                if (this.getImage().src !== this.getSprites().run.image.src) {
-                    this.setImage(this.getSprites().run.image.src);
-                    this.setTotalFrames(this.getSprites().run.totalFrames);
-                    // not resetting current frame here because it's not necessary
                 }
                 break;
             case 'takeHit':
@@ -205,15 +221,39 @@ export class Fighter extends Sprite {
                     this.setCurrentFrame(0);
                 }
                 break;
+            case 'die':
+                if (this.getImage().src !== this.getSprites().die.image.src) {
+                    this.setImage(this.getSprites().die.image.src);
+                    this.setTotalFrames(this.getSprites().die.totalFrames);
+                    this.setCurrentFrame(0);
+                }
+                break;
             default:
                 break;
+        }
+    };
+
+    private attack(): void {
+        this.setIsAttacking(true);
+        this.switchSpriteState('attack');
+    };
+
+    public takeHit = (damage: number): void => {
+        this.setHealth(this.getHealth() - damage);
+
+        if (this.getHealth() <= 0) {
+            this.switchSpriteState('die');
+        } else {
+            this.switchSpriteState('takeHit');
         }
     };
 
     public update = (): void => {
         this.draw();
 
-        this.animateFrames();
+        if (!this.getIsDead()) {
+            this.animateFrames();
+        }
         
         this.setPosition({
             ...this.getPosition(),
@@ -272,16 +312,6 @@ export class Fighter extends Sprite {
         if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
             this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
         }
-    };
-
-    private attack(): void {
-        this.setIsAttacking(true);
-        this.switchSpriteState('attack');
-    };
-
-    public takeHit = (damage: number): void => {
-        this.switchSpriteState('takeHit');
-        this.setHealth(this.getHealth() - damage);
     };
 
     private handleKeydown = (event: KeyboardEvent) => {

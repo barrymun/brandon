@@ -24,5 +24,5 @@ export enum Direction {
 }
 export const defaultTimer: number = 20; // seconds
 export const defaultHealth: number = 100;
-export const defaultAttackDamage: number = 10;
+export const defaultAttackDamage: number = 20;
 export const groundOffset: number = 96;

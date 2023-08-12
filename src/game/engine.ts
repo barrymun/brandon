@@ -113,6 +113,10 @@ export class Engine extends Base {
                     imageSrc: 'assets/img/samurai-mack/take-hit-white-silhouette.png',
                     totalFrames: 4,
                 },
+                die: {
+                    imageSrc: 'assets/img/samurai-mack/death.png',
+                    totalFrames: 6,
+                },
             },
             scale: 2.5,
             offset: { x: 215, y: 157 },
@@ -153,6 +157,10 @@ export class Engine extends Base {
                 takeHit: {
                     imageSrc: 'assets/img/kenji/take-hit.png',
                     totalFrames: 3,
+                },
+                die: {
+                    imageSrc: 'assets/img/kenji/death.png',
+                    totalFrames: 7,
                 },
             },
             scale: 2.5,
@@ -201,7 +209,6 @@ export class Engine extends Base {
             && attacker.getIsAttacking()
             && attacker.getCurrentFrame() === Math.ceil(attacker.getSprites().attack.totalFrames / 2)
         ) {
-            console.log('hit');
             attacker.setIsAttacking(false);
             defender.takeHit(attacker.getDamage());
             return true;
@@ -286,10 +293,16 @@ export class Engine extends Base {
         
         if (this.getPlayer().getHealth() <= 0) {
             this.gameOverTitle.innerHTML = 'Game over, you lose!';
-            gameOver = true;
+            this.getPlayer().destroy();
+            setTimeout(() => {
+                this.endGame();
+            }, 3000);
         } else if (this.getEnemy().getHealth() <= 0) {
             this.gameOverTitle.innerHTML = 'Game over, you win!';
-            gameOver = true;
+            this.getEnemy().destroy();
+            setTimeout(() => {
+                this.endGame();
+            }, 3000);
         }
 
         if (this.getTimer() <= 0) {

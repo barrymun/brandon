@@ -119,7 +119,6 @@ export class Sprite extends Base {
         super();
         this.setPosition(position);
         if (imageSrc) {
-            console.log(imageSrc)
             this.setImage(imageSrc);
             this.setTotalFrames(totalFrames);
         } else {
@@ -138,7 +137,6 @@ export class Sprite extends Base {
             );
             this.setImage(this.getSprites().idle.image.src);
             this.setTotalFrames(this.getSprites().idle.totalFrames);
-            console.log(this.getSprites());
         }
         this.setScale(scale);
         this.setHeldFrames(heldFrames);
