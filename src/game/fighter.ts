@@ -150,8 +150,15 @@ export class Fighter extends Sprite {
     private isFalling = (): boolean => this.getVelocity().y > 0;
 
     private switchSpriteState = (state: SpriteAnimation): void => {
+        // don't switch if attack animation is still playing
         if (this.getImage().src === this.getSprites().attack.image.src
             && this.getCurrentFrame() < this.getSprites().attack.totalFrames - 1) {
+            return;
+        }
+
+        // don't switch if take hit animation is still playing
+        if (this.getImage().src === this.getSprites().takeHit.image.src
+            && this.getCurrentFrame() < this.getSprites().takeHit.totalFrames - 1) {
             return;
         }
 
@@ -191,6 +198,13 @@ export class Fighter extends Sprite {
                     // not resetting current frame here because it's not necessary
                 }
                 break;
+            case 'takeHit':
+                if (this.getImage().src !== this.getSprites().takeHit.image.src) {
+                    this.setImage(this.getSprites().takeHit.image.src);
+                    this.setTotalFrames(this.getSprites().takeHit.totalFrames);
+                    this.setCurrentFrame(0);
+                }
+                break;
             default:
                 break;
         }
@@ -215,12 +229,14 @@ export class Fighter extends Sprite {
                 y: this.getPosition().y + (this.height / 3),
             },
         });
-        this.getContext().fillRect(
-            this.getAttackBox().position.x,
-            this.getAttackBox().position.y,
-            this.getAttackBoxOffset().width,
-            this.getAttackBoxOffset().height,
-        );
+        
+        // attack box rect for debugging
+        // this.getContext().fillRect(
+        //     this.getAttackBox().position.x,
+        //     this.getAttackBox().position.y,
+        //     this.getAttackBoxOffset().width,
+        //     this.getAttackBoxOffset().height,
+        // );
 
         // handle gravity
         if (this.getPosition().y + this.height + this.getVelocity().y 
@@ -261,6 +277,11 @@ export class Fighter extends Sprite {
     private attack(): void {
         this.setIsAttacking(true);
         this.switchSpriteState('attack');
+    };
+
+    public takeHit = (damage: number): void => {
+        this.switchSpriteState('takeHit');
+        this.setHealth(this.getHealth() - damage);
     };
 
     private handleKeydown = (event: KeyboardEvent) => {

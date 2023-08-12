@@ -109,6 +109,10 @@ export class Engine extends Base {
                     imageSrc: 'assets/img/samurai-mack/run.png',
                     totalFrames: 8,
                 },
+                takeHit: {
+                    imageSrc: 'assets/img/samurai-mack/take-hit-white-silhouette.png',
+                    totalFrames: 4,
+                },
             },
             scale: 2.5,
             offset: { x: 215, y: 157 },
@@ -145,6 +149,10 @@ export class Engine extends Base {
                 run: {
                     imageSrc: 'assets/img/kenji/run.png',
                     totalFrames: 8,
+                },
+                takeHit: {
+                    imageSrc: 'assets/img/kenji/take-hit.png',
+                    totalFrames: 3,
                 },
             },
             scale: 2.5,
@@ -194,8 +202,8 @@ export class Engine extends Base {
             && attacker.getCurrentFrame() === Math.ceil(attacker.getSprites().attack.totalFrames / 2)
         ) {
             console.log('hit');
-            defender.setHealth(defender.getHealth() - attacker.getDamage());
             attacker.setIsAttacking(false);
+            defender.takeHit(attacker.getDamage());
             return true;
         }
         return false;

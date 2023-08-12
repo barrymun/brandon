@@ -17,4 +17,4 @@ export interface AttackBoxDimensions {
 
 export type DirectionFaced = Direction.Left | Direction.Right;
 
-export type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'fall' | 'run';
+export type SpriteAnimation = 'idle' | 'attack' | 'jump' | 'fall' | 'run' | 'takeHit';
