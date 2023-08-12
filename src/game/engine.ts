@@ -349,6 +349,9 @@ export class Engine extends Base {
         
         this.getBackground().update();
         this.getShop().update();
+        // overlay so that the background and shop are less in focus
+        this.getContext().fillStyle = Colour.Overlay;
+        this.getContext().fillRect(0, 0, this.canvas.width, this.canvas.height);
         this.getPlayer().update();
         this.getEnemy().update();
 

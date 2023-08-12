@@ -17,6 +17,7 @@ export enum Colour {
     Green = 'green',
     Blue = 'blue',
     Black = 'black',
+    Overlay = 'rgba(255, 255, 255, 0.15)',
 };
 export enum Direction {
     Left = 'left',
