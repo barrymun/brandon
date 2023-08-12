@@ -157,6 +157,8 @@ export class Fighter extends Sprite {
     
     private isFalling = (): boolean => this.getVelocity().y > 0;
 
+    private isDying = (): boolean => this.getHealth() <= 0;
+
     private switchSpriteState = (state: SpriteAnimation): void => {
         // don't switch if dying
         if (this.getImage().src === this.getSprites().die.image.src) {
@@ -241,10 +243,41 @@ export class Fighter extends Sprite {
     public takeHit = (damage: number): void => {
         this.setHealth(this.getHealth() - damage);
 
-        if (this.getHealth() <= 0) {
+        if (this.isDying()) {
             this.switchSpriteState('die');
         } else {
             this.switchSpriteState('takeHit');
+        }
+    };
+
+    private handleGravity = (): void => {
+        if (this.getPosition().y + this.height + this.getVelocity().y 
+            >= this.canvas.height - groundOffset) {
+            this.setVelocity({ ...this.getVelocity(), y: 0 });
+        } else {
+            this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });
+        }
+    };
+
+    private handleMovementVelocity = (): void => {
+        if (this.isDying()) {
+            return;
+        }
+        
+        if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
+            this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
+            if (!this.isJumping() && !this.isFalling()) {
+                this.switchSpriteState('run');
+            }
+        }
+        if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
+            this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
+            if (!this.isJumping() && !this.isFalling()) {
+                this.switchSpriteState('run');
+            }
+        }
+        if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
+            this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
         }
     };
 
@@ -278,15 +311,9 @@ export class Fighter extends Sprite {
         //     this.getAttackBoxOffset().height,
         // );
 
-        // handle gravity
-        if (this.getPosition().y + this.height + this.getVelocity().y 
-            >= this.canvas.height - groundOffset) {
-            this.setVelocity({ ...this.getVelocity(), y: 0 });
-        } else {
-            this.setVelocity({ ...this.getVelocity(), y: this.getVelocity().y + this.gravity });
-        }
+        this.handleGravity();
 
-        // unset velocity (handle no keys pressed)
+        // unset horizontal velocity (handle no keys pressed)
         this.setVelocity({ ...this.getVelocity(), x: 0 });
 
         if (this.isJumping()) {
@@ -297,21 +324,7 @@ export class Fighter extends Sprite {
             this.switchSpriteState('idle');
         }
         
-        if (this.getKeys().right.pressed && !this.getKeys().left.pressed) {
-            this.setVelocity({ ...this.getVelocity(), x: this.moveSpeed });
-            if (!this.isJumping() && !this.isFalling()) {
-                this.switchSpriteState('run');
-            }
-        }
-        if (this.getKeys().left.pressed && !this.getKeys().right.pressed) {
-            this.setVelocity({ ...this.getVelocity(), x: -this.moveSpeed });
-            if (!this.isJumping() && !this.isFalling()) {
-                this.switchSpriteState('run');
-            }
-        }
-        if (this.getKeys().jump.pressed && this.getVelocity().y === 0) {
-            this.setVelocity({ ...this.getVelocity(), y: -this.jumpHeight });
-        }
+        this.handleMovementVelocity();
     };
 
     private handleKeydown = (event: KeyboardEvent) => {
