@@ -316,15 +316,23 @@ export class Engine extends Base {
 
     private determineDirectionFaced = (): void => {
         if (this.getPlayer().getPosition().x < this.getEnemy().getPosition().x) {
-            this.getPlayer().setDirectionFaced(Direction.Right);
-            this.getPlayer().setShouldFlip(false);
-            this.getEnemy().setDirectionFaced(Direction.Left);
-            this.getEnemy().setShouldFlip(false);
+            if (!this.getPlayer().getIsDead() && !this.getPlayer().isDying()) {
+                this.getPlayer().setDirectionFaced(Direction.Right);
+                this.getPlayer().setShouldFlip(false);
+            }
+            if (!this.getEnemy().getIsDead() && !this.getEnemy().isDying()) {
+                this.getEnemy().setDirectionFaced(Direction.Left);
+                this.getEnemy().setShouldFlip(false);
+            }
         } else {
-            this.getPlayer().setDirectionFaced(Direction.Left);
-            this.getPlayer().setShouldFlip(true);
-            this.getEnemy().setDirectionFaced(Direction.Right);
-            this.getEnemy().setShouldFlip(true);
+            if (!this.getPlayer().getIsDead() && !this.getPlayer().isDying()) {
+                this.getPlayer().setDirectionFaced(Direction.Left);
+                this.getPlayer().setShouldFlip(true);
+            }
+            if (!this.getEnemy().getIsDead() && !this.getEnemy().isDying()) {
+                this.getEnemy().setDirectionFaced(Direction.Right);
+                this.getEnemy().setShouldFlip(true);
+            }
         }
     };
 
