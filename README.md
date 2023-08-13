@@ -24,7 +24,7 @@ If you, dear reader, appreciate the assets and inspirations as much as I do, ple
 
 ## Getting Started
 
-`yarn install`
+`yarn install && yarn build`
 
 ## Conclusion
 
